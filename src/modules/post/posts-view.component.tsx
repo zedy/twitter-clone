@@ -1,7 +1,13 @@
+// libs
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
 // utils
 import Image from 'next/image';
 import { type RouterOutputs, api } from "~/utils/api";
 import { NO_POSTS, POSTS_GET_ERROR, POSTS_GET_LOADING } from '~/utils/conts';
+
+dayjs.extend(relativeTime);
 
 type PostType = RouterOutputs['posts']['getAll'][number];
 
@@ -31,7 +37,7 @@ const PostsView = () => {
         </div>
         <div className="flex flex-col">
           <div>
-            <b>{`@${author?.userName}`}</b> • <span className="font-thin text-sm text-slate-300">{post.createdAt.toISOString()}</span>
+            <b>{`@${author?.userName}`}</b> • <span className="font-thin text-sm text-slate-300">{dayjs(post.createdAt).fromNow()}</span>
           </div>
           <div>
             {post.content}
