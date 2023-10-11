@@ -12,3 +12,5 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 - [Planetscale](https://planetscale.com/)
+- [Vercel](https://vercel.com/)
+- [Clerk](https://clerk.com/)
