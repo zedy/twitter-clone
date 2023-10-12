@@ -1,3 +1,5 @@
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 import { clerkClient } from '@clerk/nextjs';
 import type { User } from '@clerk/nextjs/dist/types/server';
 import {
@@ -6,6 +8,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 // custom fn for returning specific user fields instead of the entire user obj
 const filterUserFields = (user: User) => {
@@ -15,6 +18,20 @@ const filterUserFields = (user: User) => {
     userName: user.username,
   }
 };
+
+// Create a new ratelimiter, that allows 3 requests per 1 minute
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "1 m"),
+  analytics: true,
+  /**
+   * Optional prefix for the keys used in redis. This is useful if you want to share a redis
+   * instance with other applications and want to avoid key collisions. The default prefix is
+   * "@upstash/ratelimit"
+   */ 
+  prefix: "@upstash/ratelimit",
+});
+
 
 export const postsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -48,6 +65,12 @@ export const postsRouter = createTRPCRouter({
         content: z.string().min(1).max(255),
       })
     ).mutation(async ({ ctx, input }) => {
+      const { success } = await ratelimit.limit(ctx.userId);
+ 
+      if (!success) {
+        throw new TRPCError({ code: 'TOO_MANY_REQUESTS', message: 'rate limit reached'});
+      }
+
       const post = await ctx.db.post.create({
         data: {
           authorId: ctx.userId ?? '',

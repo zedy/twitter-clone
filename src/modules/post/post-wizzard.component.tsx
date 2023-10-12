@@ -6,7 +6,12 @@ import { useState } from 'react';
 
 const CreatePostWizzard = () => {
   const { user } = useUser();
-  const { mutate } = api.posts.create.useMutation();
+  const apiCtx = api.useContext();
+  const { mutate, isLoading } = api.posts.create.useMutation({
+    onSuccess: async () => {
+      await apiCtx.posts.getAll.invalidate();
+    }
+  });
   const [input, setInput] = useState<string>('');
 
   return (
@@ -27,10 +32,12 @@ const CreatePostWizzard = () => {
         type='text'
         placeholder="What's happening?"
         className="bg-transparent grow outline-none" />
-      <button onClick={() => {
-        mutate({ content: input });
-        setInput('');
-      }}>Post</button>
+      <button
+        disabled={isLoading}
+        onClick={() => {
+          mutate({ content: input });
+          setInput('');
+        }}>Post</button>
     </div>
   );
 };
