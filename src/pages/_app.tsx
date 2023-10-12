@@ -11,6 +11,9 @@ import { api } from "~/utils/api";
 // styles
 import "~/styles/globals.css";
 
+// modules
+import HeadComponent from '~/modules/layout/head.component';
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
@@ -18,6 +21,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <ClerkProvider {...pageProps}>
       <SessionProvider session={session}>
+        {/* default Head, if overwrite needed, extend to any page */}
+        <HeadComponent />
         <Component {...pageProps} />
         <Toaster />
       </SessionProvider>
