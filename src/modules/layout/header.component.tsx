@@ -9,9 +9,9 @@ const HeaderComponent = () => {
       <div className="flex justify-between w-full">
         <CreatePostWizzard />
         <div className="flex">
-          <div className="mr-5">
+          {/* <div className="mr-5">
             <UserButton afterSignOutUrl="/" />
-          </div>
+          </div> */}
           {!user || !isSignedIn ? <SignInButton mode='modal' /> : <SignOutButton />}
         </div>
       </div>

@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
 import { type RouterOutputs, api } from "~/utils/api";
 import { NO_POSTS, POSTS_GET_ERROR, POSTS_GET_LOADING } from '~/utils/conts';
+import { LoadingOverlay } from '../spinner/loading.component';
 
 dayjs.extend(relativeTime);
 
@@ -16,7 +17,7 @@ const PostsView = () => {
   console.log('posts', data);
 
   if (isLoading) {
-    return <div>{POSTS_GET_LOADING}</div>
+    return <LoadingOverlay />;
   }
 
   if (isError) {
