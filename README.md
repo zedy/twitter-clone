@@ -18,3 +18,4 @@ It contains and is built using the following technologies and libraries:
 - [dayJS](https://day.js.org/)
 - [Zod](https://zod.dev/)
 - [Upstash](https://upstash.com/)
+- [React Hook Form + Yup]()
