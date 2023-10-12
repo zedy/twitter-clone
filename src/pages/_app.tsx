@@ -3,6 +3,7 @@ import { type Session } from "next-auth"
 import { ClerkProvider } from "@clerk/nextjs";;
 import { type AppType } from "next/app";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from 'react-hot-toast';
 
 // utils
 import { api } from "~/utils/api";
@@ -18,6 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <ClerkProvider {...pageProps}>
       <SessionProvider session={session}>
         <Component {...pageProps} />
+        <Toaster />
       </SessionProvider>
     </ClerkProvider>
   );

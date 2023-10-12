@@ -3,16 +3,21 @@ import Image from 'next/image';
 import { useUser } from '@clerk/nextjs';
 import { api } from '~/utils/api';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const CreatePostWizzard = () => {
   const { user } = useUser();
   const apiCtx = api.useContext();
+  const [input, setInput] = useState<string>('');
   const { mutate, isLoading } = api.posts.create.useMutation({
     onSuccess: async () => {
       await apiCtx.posts.getAll.invalidate();
-    }
-  });
-  const [input, setInput] = useState<string>('');
+    },
+    onError: (error) => {
+      // show error in tostrrr
+      toast.error(error.message);
+    },
+  });  
 
   return (
     <div className="post-wizzard flex items-center w-full">
