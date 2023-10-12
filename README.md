@@ -16,3 +16,4 @@ It contains and is built using the following technologies:
 - [Vercel](https://vercel.com/)
 - [Clerk](https://clerk.com/)
 - [dayJS](https://day.js.org/)
+- [Zod](https://zod.dev/)

@@ -1,9 +1,13 @@
 // libs
 import Image from 'next/image';
 import { useUser } from '@clerk/nextjs';
+import { api } from '~/utils/api';
+import { useState } from 'react';
 
 const CreatePostWizzard = () => {
   const { user } = useUser();
+  const { mutate } = api.posts.create.useMutation();
+  const [input, setInput] = useState<string>('');
 
   return (
     <div className="post-wizzard flex items-center w-full">
@@ -12,12 +16,21 @@ const CreatePostWizzard = () => {
           <Image src={user ? user.imageUrl : ''} alt='profile image' width={64} height={64} objectFit={'contain'} />
         ) : (
           <div className="relative w-16 h-16 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-            <svg className="absolute w-18 h-18 text-gray-400 top-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <svg className="absolute w-18 h-18 text-gray-400 top-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
           </div>
         )
         }
       </div>
-      <input type='text' placeholder="What's happening?" className="bg-transparent grow outline-none" />
+      <input
+        onChange={(e) => setInput(e.target.value)}
+        value={input}
+        type='text'
+        placeholder="What's happening?"
+        className="bg-transparent grow outline-none" />
+      <button onClick={() => {
+        mutate({ content: input });
+        setInput('');
+      }}>Post</button>
     </div>
   );
 };
