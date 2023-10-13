@@ -55,6 +55,30 @@ export const postsRouter = createTRPCRouter({
     }));
   }),
 
+  getPostByUserId: publicProcedure.input(z.object({
+    userId: z.string(),
+  })).query(async ({ ctx, input }) => {
+    const posts = await ctx.db.post.findMany({
+      take: 100,
+      orderBy: {
+        createdAt: 'desc'
+      },
+      where: {
+        authorId: input.userId
+      } 
+    });
+
+    const users = (await clerkClient.users.getUserList({
+      userId: posts.map((post) => post.authorId),
+      limit: 100,
+    })).map(filterUserFields);
+
+    return posts.map((post) => ({
+      post,
+      author: users.find((user) => user.id === post.authorId),
+    }));
+  }),
+
   create: protectedProcedure
     .input(
       z.object({
