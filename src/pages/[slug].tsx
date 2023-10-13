@@ -1,6 +1,7 @@
 // libs
 import type { GetStaticProps, NextPage } from 'next';
 import Head from "next/head";
+import Image from 'next/image';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
 import { useRouter } from 'next/router'
@@ -12,7 +13,6 @@ import CenterComponent from '~/modules/layout/center.component';
 import { db } from '~/server/db';
 import { api } from '~/utils/api';
 import { appRouter } from '~/server/api/root';
-import Image from 'next/image';
 import MyPosts from '~/modules/post/my-posts.component';
 
 /**

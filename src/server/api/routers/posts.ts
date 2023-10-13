@@ -9,6 +9,7 @@ import {
 } from "~/server/api/trpc";
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
+import type { Post } from "@prisma/client";
 
 // custom fn for returning specific user fields instead of the entire user obj
 const filterUserFields = (user: User) => {
@@ -17,6 +18,18 @@ const filterUserFields = (user: User) => {
     imageUrl: user.imageUrl,
     userName: user.username,
   }
+};
+
+const attachAuthorToPosts = async (posts: Post[]) => {
+  const users = (await clerkClient.users.getUserList({
+    userId: posts.map((post) => post.authorId),
+    limit: 100,
+  })).map(filterUserFields);
+
+  return posts.map((post) => ({
+    post,
+    author: users.find((user) => user.id === post.authorId),
+  }));
 };
 
 // Create a new ratelimiter, that allows 2 requests per 1 minute
@@ -34,6 +47,29 @@ const ratelimit = new Ratelimit({
 
 
 export const postsRouter = createTRPCRouter({
+  getPostById: publicProcedure.input(
+    z.object({
+      postId: z.string(),
+    })
+  ).query(async ({ ctx, input }) => {
+    const post = await ctx.db.post.findFirst({
+      where: {
+        id: input.postId
+      }
+    });
+
+    if (!post) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'No post found matching id',
+      });
+    }
+
+    const postsWithAuthors = await attachAuthorToPosts([post]);
+
+    return postsWithAuthors;
+  }),
+
   getAll: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.db.post.findMany({
       take: 100,
@@ -44,15 +80,9 @@ export const postsRouter = createTRPCRouter({
 
     // until we setup the ORM and Authors Table and relations
     // we'll do this: get data from the Clark Client from the Server
-    const users = (await clerkClient.users.getUserList({
-      userId: posts.map((post) => post.authorId),
-      limit: 100,
-    })).map(filterUserFields);
+    const postsWithAuthors = await attachAuthorToPosts(posts);
 
-    return posts.map((post) => ({
-      post,
-      author: users.find((user) => user.id === post.authorId),
-    }));
+    return postsWithAuthors;
   }),
 
   getPostByUserId: publicProcedure.input(z.object({
@@ -67,16 +97,10 @@ export const postsRouter = createTRPCRouter({
         authorId: input.userId
       } 
     });
+    
+    const postsWithAuthors = await attachAuthorToPosts(posts);
 
-    const users = (await clerkClient.users.getUserList({
-      userId: posts.map((post) => post.authorId),
-      limit: 100,
-    })).map(filterUserFields);
-
-    return posts.map((post) => ({
-      post,
-      author: users.find((user) => user.id === post.authorId),
-    }));
+    return postsWithAuthors;
   }),
 
   create: protectedProcedure
