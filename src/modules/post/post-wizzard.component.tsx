@@ -1,23 +1,24 @@
 // libs
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { useUser } from '@clerk/nextjs';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { useSession } from 'next-auth/react';
 
 // utils
 import { api } from '~/utils/api';
+
+// components
+import { Spinner } from '../spinner/loading.component';
+import AvatarSvg from '~/assets/avatar.svg';
 
 type FormData = {
   content: string;
 }
 
-// components
-import { Spinner } from '../spinner/loading.component';
-
 const CreatePostWizzard = () => {
-  const { user } = useUser();
+  const { data } = useSession();
   const apiCtx = api.useContext();
 
   const schema = yup
@@ -55,14 +56,25 @@ const CreatePostWizzard = () => {
     toast.error(errors.content.message);
   }
 
+
+
   return (
     <div className="post-wizzard flex items-center w-full">
-      <div className="rounded-full mr-2 overflow-hidden">
-        {user ? (
-          <Image src={user ? user.imageUrl : ''} alt='profile image' width={64} height={64} objectFit={'contain'} />
+      <div className="rounded-full mr-2 overflow-hidden" style={{ minWidth: '64px' }}>
+        {data?.user ? (
+          <Image
+            src={data.user.image?.toString() ?? ''}
+            alt='profile image'
+            width={64}
+            height={64}
+            className="object-contain"
+            loading={'eager'}
+          />
         ) : (
           <div className="relative w-16 h-16 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-            <svg className="absolute w-18 h-18 text-gray-400 top-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
+            <svg className="absolute w-18 h-18 text-gray-400 top-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
+            </svg>
           </div>
         )
         }

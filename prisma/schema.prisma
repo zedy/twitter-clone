@@ -6,16 +6,83 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 model Post {
-    id  String  @id @default(cuid())
+    id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    content String @db.VarChar(255)
-    authorId String
+    content   String   @db.VarChar(255)
+    User      User?    @relation(fields: [userId], references: [id])
+    userId    String?
 
-    @@index([authorId])
+    @@index([userId])
+}
+
+// This is used by next-auth, don't touch it!
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// This is our custom table for the User
+// When a new person signups on the platform next-auth will automatically
+// create a new account and user model for them. Ain't that nice :)
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    username      String?   @unique @default(cuid())
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    dob           DateTime?
+    gender        Gender?
+    location      String?
+    bio           String?   @db.VarChar(500)
+    socials       Json?
+    title         String?
+    accounts      Account[]
+    sessions      Session[]
+    posts         Post[]
+}
+
+enum Gender {
+    MALE
+    FEMALE
+    OTHER
+}
+
+// Necessary for Next auth
+// Ignore this table, you should not touch it, i've set it up so hands off
+// Any thing related to the user goes into the User model
+model Account {
+    id                       String  @id @default(cuid())
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String? @db.Text
+    access_token             String? @db.Text
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String? @db.Text
+    session_state            String?
+    refresh_token_expires_in Int?
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
 }

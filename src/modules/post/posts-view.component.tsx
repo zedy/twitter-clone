@@ -15,11 +15,11 @@ const PostsView = () => {
 
   if (isError) {
     return <div>{POSTS_GET_ERROR}</div>
-  }  
+  }
 
   return (
     <div className="flex flex-col">
-      {data?.length ? data.map((item) => <Post key={item.post.id} {...item} />) : NO_POSTS}
+      {data?.length ? data.map((post) => <Post key={post.id} post={post} user={post.User} />) : NO_POSTS}
     </div>
   )
 }

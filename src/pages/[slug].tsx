@@ -2,25 +2,16 @@
 import type { GetStaticProps, NextPage } from 'next';
 import Head from "next/head";
 import Image from 'next/image';
-import { createServerSideHelpers } from '@trpc/react-query/server';
-import superjson from 'superjson';
 import { useRouter } from 'next/router'
 
 // components/modules
 import CenterComponent from '~/modules/layout/center.component';
 
 // utils
-import { db } from '~/server/db';
 import { api } from '~/utils/api';
-import { appRouter } from '~/server/api/root';
+import { helpers } from '~/server/ssgHelper';
 import MyPosts from '~/modules/post/my-posts.component';
 
-/**
- * @comment IT WORKS! after 3h debugging! 
- * 
- * solution: restart the server 🤦‍♂️
- * 
- */
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const router = useRouter();
   const { data, isError, isLoading } = api.profile.getUserByUserName.useQuery({ username });
@@ -37,7 +28,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>{data?.userName} profile page</title>
+        <title>{data?.username} profile page</title>
       </Head>
       <CenterComponent>
         <>
@@ -45,7 +36,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
           <div className="relative h-36 bg-slate-600">
             <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">[splash placeholder]</p>
             <Image
-              src={data?.imageUrl ?? ''}
+              src={data?.image ?? ''}
               alt={'profile image'}
               width={128}
               height={128}
@@ -54,10 +45,10 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
           </div>
           <div className="h-[64px]"></div>
           <div className="p-4 flex items-baseline">
-            <div className="text-2xl font-bold">{`@${data?.userName ?? "unknown"
+            <div className="text-2xl font-bold">{`@${data?.username ?? "unknown"
               }`}
             </div>
-            <div className="text-thin ml-1">({data?.firstName} {data?.lastName})</div>
+            <div className="text-thin ml-1">({data?.name})</div>
           </div>
           <div className="w-full border-b border-slate-400" />
           <MyPosts userId={data!.id} />
@@ -79,14 +70,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
  * @returns 
  */
 export const getStaticProps: GetStaticProps = async (context) => {
-  const helpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: {
-      db, userId: null, session: null,
-    },
-    transformer: superjson,
-  });
-
   const slug = context.params?.slug;
 
   if (!slug || typeof slug !== 'string') {

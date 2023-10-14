@@ -1,6 +1,5 @@
 // libs
 import { type Session } from "next-auth"
-import { ClerkProvider } from "@clerk/nextjs";;
 import { type AppType } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from 'react-hot-toast';
@@ -19,14 +18,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <ClerkProvider {...pageProps}>
-      <SessionProvider session={session}>
-        {/* default Head, if overwrite needed, extend to any page */}
-        <HeadComponent />
-        <Component {...pageProps} />
-        <Toaster />
-      </SessionProvider>
-    </ClerkProvider>
+    <SessionProvider session={session}>
+      {/* default Head, if overwrite needed, extend to any page */}
+      <HeadComponent />
+      <Component {...pageProps} />
+      <Toaster />
+    </SessionProvider>
   );
 };
 
