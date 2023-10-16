@@ -1,6 +1,9 @@
 # Twitter Clone
 
-Write something smart here when you think of it.
+This app is intended to be used as a coding challenge and knowledge sharing (within my company). 
+The goal is to create a working replica of twitter (the posting part, we don't care about the rest)
+and then use the codebase as a jumping off point for less experiences devs to aclimate to using different
+types of services and to learn how to build real world prod ready applications.
 
 ## Create T3 App
 

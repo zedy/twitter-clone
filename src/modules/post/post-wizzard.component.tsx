@@ -11,7 +11,6 @@ import { api } from '~/utils/api';
 
 // components
 import { Spinner } from '../spinner/loading.component';
-import AvatarSvg from '~/assets/avatar.svg';
 
 type FormData = {
   content: string;
@@ -91,7 +90,7 @@ const CreatePostWizzard = () => {
         />
         <button
           disabled={isLoading}
-          className='test'
+          className='text-amber-600'
         >{isLoading ? <Spinner /> : 'Post'}</button>
       </form>
     </div>
