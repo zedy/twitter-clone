@@ -30,7 +30,7 @@ const SinglePostPage: NextPage<{ postId: string }> = ({ postId }) => {
       <Head>
         <title>{`${trimContent(post?.content)} - @${author?.userName}`}</title>
       </Head>
-      <CenterComponent>
+      <CenterComponent title='Post'>
         <Post post={post} author={author} />
       </CenterComponent>
     </>

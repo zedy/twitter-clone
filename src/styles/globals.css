@@ -5,3 +5,23 @@
 body {
   @apply bg-gray-900 text-slate-100;
 }
+
+.tab-element {
+  background-color: transparent !important;
+  text-align: center;
+  color: #94a3b8;
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #94a3b8;
+  width: 25%;
+
+  &:hover {
+    color: #d97706;
+  }
+}
+
+.tab-element-selected {
+  color: #d97706;
+  border-bottom: 4px solid #d97706;
+}
+

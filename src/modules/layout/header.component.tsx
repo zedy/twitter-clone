@@ -9,11 +9,11 @@ const HeaderComponent = () => {
       <div className="flex justify-between w-full">
         <CreatePostWizzard />
         <div className="flex">
-          {status === 'authenticated' ? (
+          {/* {status === 'authenticated' ? (
             <button className="w-20" onClick={() => void signOut()}>Sign out</button>
           ) : (
             <button className="w-20" onClick={() => void signIn()}>Sign in</button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

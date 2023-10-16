@@ -49,6 +49,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    joined        DateTime? @default(now())
 }
 
 enum Gender {

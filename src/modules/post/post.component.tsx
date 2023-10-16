@@ -28,13 +28,22 @@ const Post: FC<ComponentProps> = ({ post, user }) => {
               height={48}
             />
           ) : (
-            <div>test</div>
+            <div>loading</div> // remove this user is always true ? 
           )}
         </Link>
       </div>
       <div className="flex flex-col">
         <div>
-          <Link href={`/@${user?.username}`}><b>{`@${user?.username}`}</b></Link> • <Link href={`/post/${post?.id}`}><span className="font-thin text-sm text-slate-300 hover:underline">{dayjs(post?.createdAt).fromNow()}</span></Link>
+          <Link href={`/@${user?.username}`}>
+            <b>{`${user?.name}`}</b>
+            <span className="ml-2 font-thin text-sm text-slate-300">@{user?.username}</span>
+          </Link>
+          <span className="font-thin opacity-50"> • </span>
+          <Link href={`/post/${post?.id}`}>
+            <span className="font-thin text-sm text-slate-300 hover:underline">
+              {dayjs(post?.createdAt).fromNow()}
+            </span>
+          </Link>
         </div>
         <div>
           {post?.content}

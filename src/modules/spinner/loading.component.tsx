@@ -35,3 +35,11 @@ export const LoadingOverlay = () => {
     </div>
   )
 };
+
+export const LoadingBlocker = () => {
+  return (
+    <div className="w-full flex justify-center items-center fixed left-0 top-1/2">
+      <Spinner />
+    </div>
+  )
+};

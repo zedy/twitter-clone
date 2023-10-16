@@ -6,7 +6,7 @@ import PostsView from '~/modules/post/posts-view.component';
 export default function Home() {
   return (
     <>
-      <CenterComponent>
+      <CenterComponent title='Home'>
         <>
           <HeaderComponent />
           <PostsView />
