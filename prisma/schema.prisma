@@ -13,12 +13,47 @@ datasource db {
 
 model Post {
     id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
     content   String   @db.VarChar(255)
+    retweets  Int      @default(0)
+    media     String?
+    likes     Int      @default(0)
+    location  String?  @db.VarChar(255)
     User      User?    @relation(fields: [userId], references: [id])
     userId    String?
+    type      PostType @default(POST)
+    createdAt DateTime @default(now())
+    replies   Reply[]  @relation("Replies")
 
     @@index([userId])
+    @@map(name: "post")
+}
+
+model Reply {
+    id        Int      @id @default(autoincrement())
+    post      Post     @relation("Replies", fields: [postId], references: [id])
+    postId    String
+    createdAt DateTime @default(now())
+
+    @@index([postId])
+    @@map(name: "replies")
+}
+
+model Likes {
+    id       String @id @default(cuid())
+    postId   String
+    username String
+
+    @@index([postId, username])
+}
+
+model Followers {
+    id          String @id @default(cuid())
+    follower    User   @relation("follower", fields: [followerId], references: [id])
+    followerId  String
+    following   User   @relation("following", fields: [followingId], references: [id])
+    followingId String
+
+    @@index([followerId, followingId])
 }
 
 // This is used by next-auth, don't touch it!
@@ -34,28 +69,35 @@ model Session {
 // When a new person signups on the platform next-auth will automatically
 // create a new account and user model for them. Ain't that nice :)
 model User {
-    id            String    @id @default(cuid())
+    id            String      @id @default(cuid())
     name          String?
-    username      String?   @unique @default(cuid())
-    email         String?   @unique
+    username      String?     @unique @default(cuid())
+    email         String?     @unique
     emailVerified DateTime?
     image         String?
     dob           DateTime?
     gender        Gender?
     location      String?
-    bio           String?   @db.VarChar(500)
+    bio           String?     @db.VarChar(500)
     socials       Json?
     title         String?
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
-    joined        DateTime? @default(now())
+    joined        DateTime?   @default(now())
+    followedBy    Followers[] @relation("following")
+    following     Followers[] @relation("follower")
 }
 
 enum Gender {
     MALE
     FEMALE
     OTHER
+}
+
+enum PostType {
+    POST
+    REPLY
 }
 
 // Necessary for Next auth

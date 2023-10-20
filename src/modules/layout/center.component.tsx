@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import Sidenav from '../sideNav/sideNav.component';
 
 interface ComponentProps {
   children: JSX.Element;
@@ -8,6 +9,7 @@ interface ComponentProps {
 const CenterComponent: FC<ComponentProps> = ({ children, title }) => {
   return (
     <main className="center-component flex justify-center">
+      <Sidenav />
       <div className="relative w-full min-h-screen md:max-w-2xl border border-t-0 border-b-0 rounded border-gray-600">
         <div className="p-4 w-full border-b border-gray-600">
           <strong>{title}</strong>

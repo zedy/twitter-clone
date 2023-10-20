@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '@prisma/client';
 import type { User } from '@prisma/client';
+import { Comment, Like, Retweet } from '~/utils/svgs';
 
 dayjs.extend(relativeTime);
 
@@ -16,8 +17,9 @@ interface ComponentProps {
 }
 
 const Post: FC<ComponentProps> = ({ post, user }) => {
+  console.log(post);
   return (
-    <div className="flex items-center p-3">
+    <div className="flex items-start p-3 w-full border-b border-slate-600">
       <div className="rounded-full overflow-hidden mr-3">
         <Link href={`/@${user?.username}`}>
           {true ? (
@@ -32,7 +34,7 @@ const Post: FC<ComponentProps> = ({ post, user }) => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-grow">
         <div>
           <Link href={`/@${user?.username}`}>
             <b>{`${user?.name}`}</b>
@@ -47,6 +49,20 @@ const Post: FC<ComponentProps> = ({ post, user }) => {
         </div>
         <div>
           {post?.content}
+        </div>
+        <div className="flex justify-between w-full pt-4 pr-8">
+          <div className='flex'>
+            {Comment(24, 24, 'd97706')}
+            <span className="ml-3">0</span>
+          </div>
+          <div className='flex'>
+            {Like(24, 24, 'd97706')}
+            <span className="ml-3">{post?.likes}</span>
+          </div>
+          <div className='flex'>
+            {Retweet(24, 24, 'd97706')}
+            <span className="ml-3">{post?.retweets}</span>
+          </div>
         </div>
       </div>
     </div>

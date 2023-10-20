@@ -18,7 +18,6 @@ export const profileRouter = createTRPCRouter({
       dob: z.date().nullable(),
     })
   ).mutation(async ({ ctx, input}) => {
-    console.log(input);
     const user = await ctx.db.user.update({
       data: input,
       where: {

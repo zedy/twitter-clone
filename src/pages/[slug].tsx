@@ -15,7 +15,7 @@ import { Modal, useModal } from '~/hooks/useModal';
 import { api } from '~/utils/api';
 import { helpers } from '~/server/ssgHelper';
 import MyPosts from '~/modules/post/my-posts.component';
-import { Calendar, Location, ArrowLeft } from '~/utils/svgs';
+import { Calendar, Location, ArrowLeft, VerifiedBadgeOutline } from '~/utils/svgs';
 import EditProfileForm from '~/modules/forms/edit-profile.form';
 import { ModalContextProvider } from '~/modules/context/modalContext';
 
@@ -42,6 +42,8 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       </Link>
     )
   };
+
+  console.log(data);
 
   const ProfileTabs = () => (
     <Tabs className=''>
@@ -102,8 +104,11 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             </button>
           </div>
           <div className="p-3 flex items-baseline flex-col">
-            <div className="">
+            <div className="flex items-baseline">
               <span className="text-2xl font-bold">{`${data?.name ?? "unknown"}`}</span>
+              <span className="ml-1">
+                {VerifiedBadgeOutline(22, 22, 'd97706')}
+              </span>
               {data?.title ? <span className="ml-1 text-thin text-md text-slate-600">({data.title})</span> : null}
             </div>
             <div className='mb-3'>

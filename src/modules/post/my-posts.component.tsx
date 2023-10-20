@@ -26,7 +26,7 @@ const MyPosts: FC<MyPostsProps> = ({ userId }) => {
 
   return (
     <div className="flex flex-col">
-      {data?.length ? data.map((post) => <Post key={post.id} post={post} user={post.User} />) : NO_POSTS}
+      {data?.length ? data.map((post) => <Post key={post.id} post={post} user={post.User} />) : <p className="p-5 text-center">{NO_POSTS}</p>}
     </div>
   )
 };
