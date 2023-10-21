@@ -1,26 +1,44 @@
-// components/modules
+// libs
 import { useSession } from 'next-auth/react';
-import CenterComponent from '~/modules/layout/center.component';
-import HeaderComponent from '~/modules/layout/header.component';
-import PostsView from '~/modules/post/posts-view.component';
-import HandleChange from '~/modules/signup/handleChange.component';
-import { LoadingPage } from '~/modules/spinner/loading.component';
+import { getProviders } from 'next-auth/react';
+import type { GetServerSideProps } from 'next';
 
-export default function Home() {
+// components/modules
+import HandleChange from '~/modules/auth/handleChange.component';
+import { LoadingPage } from '~/modules/spinner/loading.component';
+import WelcomeComponent from '~/modules/welcome/welcome.component';
+import HomePage from '~/modules/homepage/homepage.component';
+import type { FC } from 'react';
+
+export interface HomeProps {
+  providers: [
+    {
+      name: string,
+      id: string
+    }
+  ]
+}
+
+const Home: FC<HomeProps> = ({ providers }) => {
   const { status, data } = useSession();
 
   if (data === undefined) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
-  return (
-    <>
-      {data?.user.handleChosen ? (
-        <CenterComponent title='Home'>
-          <HeaderComponent />
-          <PostsView />
-        </CenterComponent>
-      ) : <HandleChange />}
-    </>
-  );
+  if (!data) {
+    return <WelcomeComponent providers={providers} />;
+  }
+
+  return data?.user?.handleChosen ? <HomePage /> : <HandleChange />
 };
+
+export default Home;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {
+      providers: await getProviders(),
+    },
+  };
+}

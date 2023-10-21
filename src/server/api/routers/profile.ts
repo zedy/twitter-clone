@@ -17,7 +17,7 @@ export const profileRouter = createTRPCRouter({
       location: z.string().max(128).nullable(),
       dob: z.date().nullable(),
     })
-  ).mutation(async ({ ctx, input}) => {
+  ).mutation(async ({ ctx, input }) => {
     const user = await ctx.db.user.update({
       data: input,
       where: {
@@ -26,6 +26,39 @@ export const profileRouter = createTRPCRouter({
     });
 
     return user;
+  }),
+
+  updateHandle: publicProcedure.input(
+    z.object({
+      username: z.string(),
+      id: z.string(),
+    })
+  ).mutation(async ({ ctx, input }) => {
+    const user = await ctx.db.user.update({
+      data: {
+        username: input.username,
+        handleChosen: true,
+      },
+      where: {
+        id: input.id,
+      }
+    });
+
+    return user;
+  }),
+
+  checkHandleAvailability: publicProcedure.input(
+    z.object({
+      username: z.string(), // validation in component
+    })
+  ).query(async ({ input, ctx }) => {
+    const results = await ctx.db.user.findUnique({
+      where: {
+        username: input.username,
+      }
+    });
+
+    return results;
   }),
 
   getUserByUserName: publicProcedure.input(z.object({

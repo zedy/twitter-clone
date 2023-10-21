@@ -43,8 +43,6 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
     )
   };
 
-  console.log(data);
-
   const ProfileTabs = () => (
     <Tabs className=''>
       <TabList className='flex justify-evenly'>
