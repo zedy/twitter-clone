@@ -13,6 +13,7 @@ import { LoadingBlocker } from '../spinner/loading.component';
 import type { User } from '@prisma/client';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ModalContext } from '../context/modalContext';
+import FormError from './error.component';
 
 export type FormData = {
   name: string;
@@ -82,11 +83,6 @@ const EditProfileForm: FC<FormProps> = ({ userData, callback, closeModal }) => {
     },
   });
 
-  // move to a form.component?
-  const Error: FC<{ message: string }> = ({ message }) => (
-    <span className="text-red-800">{message}</span>
-  );
-
   return (
     <div className="post-wizzard items-center w-full">      
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
@@ -108,7 +104,7 @@ const EditProfileForm: FC<FormProps> = ({ userData, callback, closeModal }) => {
             type='text'
             className="bg-gray-800 outline-none p-1 rounded border-b border-slate-400"
           />
-          {errors && errors?.name ? <Error message={errors.name.message!} /> : null}
+          {errors && errors?.name ? <FormError message={errors.name.message!} /> : null}
         </label>
 
         <label className='flex flex-col mb-4'>
@@ -119,7 +115,7 @@ const EditProfileForm: FC<FormProps> = ({ userData, callback, closeModal }) => {
             type='email'
             className="bg-gray-800 outline-none p-1 rounded border-b border-slate-400"
           />
-          {errors && errors?.email ? <Error message={errors.email.message!} /> : null}
+          {errors && errors?.email ? <FormError message={errors.email.message!} /> : null}
         </label>
 
         <label className='flex flex-col mb-4'>
@@ -139,7 +135,7 @@ const EditProfileForm: FC<FormProps> = ({ userData, callback, closeModal }) => {
             defaultValue={userData?.bio ?? ''}
             className="bg-gray-800 outline-none p-1 rounded border-b border-slate-400"
           />
-          {errors && errors?.bio ? <Error message={errors.bio.message!} /> : null}
+          {errors && errors?.bio ? <FormError message={errors.bio.message!} /> : null}
         </label>
 
         <hr className='bg-slate-400 mb-2' />

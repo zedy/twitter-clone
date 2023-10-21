@@ -79,7 +79,6 @@ model User {
     gender        Gender?
     location      String?
     bio           String?     @db.VarChar(500)
-    socials       Json?
     title         String?
     accounts      Account[]
     sessions      Session[]
@@ -87,6 +86,7 @@ model User {
     joined        DateTime?   @default(now())
     followedBy    Followers[] @relation("following")
     following     Followers[] @relation("follower")
+    handleChosen  Boolean     @default(false)
 }
 
 enum Gender {
@@ -116,6 +116,7 @@ model Account {
     scope                    String?
     id_token                 String? @db.Text
     session_state            String?
+    firstLogin               Boolean @default(true)
     refresh_token_expires_in Int?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 

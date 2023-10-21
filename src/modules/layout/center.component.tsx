@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import Sidenav from '../sideNav/sideNav.component';
 
 interface ComponentProps {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
   title: string | JSX.Element;
 }
 
