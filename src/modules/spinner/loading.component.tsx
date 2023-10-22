@@ -30,7 +30,7 @@ export const LoadingSection = () => {
 
 export const LoadingOverlay = () => {
   return (
-    <div className="w-full flex justify-center items-center fixed left-0 top-1/2">
+    <div className="w-full flex justify-center items-center fixed left-0 top-1/2 z-50">
       <Spinner />
     </div>
   )
@@ -38,7 +38,7 @@ export const LoadingOverlay = () => {
 
 export const LoadingBlocker = () => {
   return (
-    <div className="w-full flex justify-center items-center fixed left-0 top-1/2">
+    <div className="w-full flex justify-center items-center fixed left-0 top-1/2 z-10">
       <Spinner />
     </div>
   )

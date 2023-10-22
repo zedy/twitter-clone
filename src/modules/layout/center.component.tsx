@@ -14,6 +14,7 @@ interface ComponentProps {
 
 const CenterComponent: FC<ComponentProps> = ({ children, title }) => {
   const { status } = useSession();
+  const isLoggedIn = status === 'authenticated';
 
   const SignoutButton = () => (
     <button
@@ -28,13 +29,15 @@ const CenterComponent: FC<ComponentProps> = ({ children, title }) => {
 
   return (
     <main className="center-component flex justify-center">
-      <Sidenav />
+      {isLoggedIn && <Sidenav />}
       <div className="relative w-full min-h-screen md:max-w-2xl border border-t-0 border-b-0 rounded border-gray-600">
         <div className="flex p-4 w-full border-b border-gray-600 justify-between">
           <strong>{title}</strong>
-          <div className="flex">
-            {status === 'authenticated' && <SignoutButton />}
-          </div>
+          {isLoggedIn && (
+            <div className="flex">
+              <SignoutButton />
+            </div>
+          )}
         </div>
         {children}
       </div>

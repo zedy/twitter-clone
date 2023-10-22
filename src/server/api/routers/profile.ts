@@ -28,6 +28,23 @@ export const profileRouter = createTRPCRouter({
     return user;
   }),
 
+  createAccount: publicProcedure.input(
+    z.object({
+      username: z.string(),
+      dob: z.date(),
+      name: z.string(),
+      email: z.string().email(),
+    })
+  ).mutation(async ({ ctx, input }) => {
+    const user = await ctx.db.user.create({
+      data: {
+        ...input
+      }
+    });
+
+    return user;
+  }),
+
   updateHandle: publicProcedure.input(
     z.object({
       username: z.string(),

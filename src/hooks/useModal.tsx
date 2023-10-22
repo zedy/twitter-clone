@@ -3,6 +3,7 @@ import type { FC } from 'react';
 
 // contexts
 import { ModalContext } from '~/modules/context/modalContext';
+import { LoadingOverlay } from '~/modules/spinner/loading.component';
 
 // utils
 import { COLOR_PRIMARY } from '~/utils/conts';
@@ -14,6 +15,7 @@ interface ModalProps {
   open: boolean,
   action?: JSX.Element,
   title?: string,
+  closeOnBgClick?: boolean;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -22,6 +24,7 @@ export const Modal: FC<ModalProps> = ({
   closeModal = () => undefined,
   open = false,
   title = null,
+  closeOnBgClick = true,
 }) => {
   const { isLoading } = useContext(ModalContext);
 
@@ -34,11 +37,13 @@ export const Modal: FC<ModalProps> = ({
       className="modal fixed w-screen h-screen z-10"
       style={{ display: open ? 'block' : 'none' }}>
       <div
-        onClick={closeModal}
+        onClick={closeOnBgClick ? closeModal : () => null}
         className="modal-bg cursor-pointer bg-slate-500 opacity-50 absolute w-full h-full"></div>
       <div className="modal-body bg-slate-900 rounded-xl w-[480px] min-h-[150px] absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
         <div className='relative h-full'>
-          {isLoading ? <div className="absolute h-full w-full bg-slate-800 opacity-75"></div> : <div/>}
+          {isLoading ? <div className="absolute h-full w-full bg-slate-800 opacity-75 z-50">
+            <LoadingOverlay />
+          </div> : <div />}
           <div className="modal-header flex justify-between border-b border-slate-400 p-5">
             <div className='flex items-center'>
               <span

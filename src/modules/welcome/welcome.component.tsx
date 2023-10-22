@@ -9,6 +9,9 @@ import { Modal, useModal } from '~/hooks/useModal';
 import { COLOR_PRIMARY } from '~/utils/conts';
 import { Github, GoogleColor, Twitter } from '~/utils/svgs';
 import type { HomeProps } from '~/pages';
+import { ModalContextProvider } from '../context/modalContext';
+import { SignupContextProvider } from '../context/signupContext';
+import CreateAccount from '../account/createAccount';
 
 function getProviderIcon(name: string) {
   switch (name) {
@@ -21,6 +24,7 @@ function getProviderIcon(name: string) {
 
 const WelcomeComponent: FC<HomeProps> = ({ providers }) => {
   const { openModal, modalProps } = useModal();
+  const { openModal: openModalCreate, modalProps: modalPropsCreate } = useModal();
 
   const AuthProviderButtons: FC<{ isSignin: boolean }> = ({ isSignin }) => {
     return Object.values(providers).map((provider) => {
@@ -40,46 +44,59 @@ const WelcomeComponent: FC<HomeProps> = ({ providers }) => {
   };
 
   return (
-    <>
-      <Modal
-        {...modalProps}
-        title='Sign In'
-      >
-        <div className="w-80 m-auto">
-          <AuthProviderButtons isSignin={true} />
-        </div>
-      </Modal>
-      <div className="flex w-screen h-screen items-center justify-center">
-        <div className="w-1/2 flex justify-center">
-          {Twitter(250, 250, COLOR_PRIMARY)}
-        </div>
-        <div className="flex flex-col w-1/2">
-          <h1 className="text-amber-600 text-6xl mb-16 font-bold">Happening Now</h1>
-          <p className="text-2xl mb-8 font-bold">Join today.</p>
-          <div className='flex flex-col justify-center max-w-xs'>
-            <AuthProviderButtons isSignin={false} />
-            <div className="flex">
-              <div className="flex items-center flex-grow">
-                <div className="h-1 border-b border-slate-600 w-full"></div>
+    <ModalContextProvider>
+      <SignupContextProvider>
+        <Modal
+          {...modalProps}
+          title='Sign In'
+        >
+          <div className="w-80 m-auto">
+            <AuthProviderButtons isSignin={true} />
+          </div>
+        </Modal>
+        <Modal
+          {...modalPropsCreate}
+          closeOnBgClick={false}
+          title='Create your account'
+        >
+          <div className="w-80 m-auto">
+            <CreateAccount />
+          </div>
+        </Modal>
+        <div className="flex w-screen h-screen items-center justify-center">
+          <div className="w-1/2 flex justify-center">
+            {Twitter(250, 250, COLOR_PRIMARY)}
+          </div>
+          <div className="flex flex-col w-1/2">
+            <h1 className="text-amber-600 text-6xl mb-16 font-bold">Happening Now</h1>
+            <p className="text-2xl mb-8 font-bold">Join today.</p>
+            <div className='flex flex-col justify-center max-w-xs'>
+              <AuthProviderButtons isSignin={false} />
+              <div className="flex">
+                <div className="flex items-center flex-grow">
+                  <div className="h-1 border-b border-slate-600 w-full"></div>
+                </div>
+                <span className="p-4">or</span>
+                <div className="flex items-center flex-grow">
+                  <div className="h-1 border-b border-slate-600 w-full"></div>
+                </div>
               </div>
-              <span className="p-4">or</span>
-              <div className="flex items-center flex-grow">
-                <div className="h-1 border-b border-slate-600 w-full"></div>
-              </div>
-            </div>
-            <button className="bg-amber-600 rounded-full h-12 w-full font-bold hover:bg-amber-700 transition-all">Create account</button>
-            <div className="mt-20">
-              <p className="text-2xl mb-8 font-bold">Already have an account?</p>
               <button
-                className="bg-transparent text-amber-600 border-2 border-slate-600 rounded-full h-12 w-full font-bold hover:bg-slate-600 transition-all"
-                onClick={openModal}>
-                Sign in
-              </button>
+                onClick={openModalCreate}
+                className="bg-amber-600 rounded-full h-12 w-full font-bold hover:bg-amber-700 transition-all">Create account</button>
+              <div className="mt-20">
+                <p className="text-2xl mb-8 font-bold">Already have an account?</p>
+                <button
+                  className="bg-transparent text-amber-600 border-2 border-slate-600 rounded-full h-12 w-full font-bold hover:bg-slate-600 transition-all"
+                  onClick={openModal}>
+                  Sign in
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </SignupContextProvider>
+    </ModalContextProvider>
   )
 }
 
