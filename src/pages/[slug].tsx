@@ -10,14 +10,15 @@ import 'react-tabs/style/react-tabs.css';
 // components/modules
 import CenterComponent from '~/modules/layout/center.component';
 import { Modal, useModal } from '~/hooks/useModal';
+import MyPosts from '~/modules/post/my-posts.component';
+import EditProfileForm from '~/modules/forms/edit-profile.form';
+import { ModalContextProvider } from '~/modules/context/modalContext';
 
 // utils
 import { api } from '~/utils/api';
 import { helpers } from '~/server/ssgHelper';
-import MyPosts from '~/modules/post/my-posts.component';
 import { Calendar, Location, ArrowLeft, VerifiedBadgeOutline } from '~/utils/svgs';
-import EditProfileForm from '~/modules/forms/edit-profile.form';
-import { ModalContextProvider } from '~/modules/context/modalContext';
+import { COLOR_PRIMARY } from '~/utils/conts';
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { openModal, modalProps, closeModal } = useModal();
@@ -35,7 +36,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const BackHomeLink = () => {
     return (
       <Link className='flex items-center' href={'/'}>
-        {ArrowLeft(28, 28, 'd97706')}
+        {ArrowLeft(28, 28, COLOR_PRIMARY)}
         <b className="text-xl ml-5">
           {data?.name}
         </b>
@@ -105,7 +106,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
             <div className="flex items-baseline">
               <span className="text-2xl font-bold">{`${data?.name ?? "unknown"}`}</span>
               <span className="ml-1">
-                {VerifiedBadgeOutline(22, 22, 'd97706')}
+                {VerifiedBadgeOutline(22, 22, COLOR_PRIMARY)}
               </span>
               {data?.title ? <span className="ml-1 text-thin text-md text-slate-600">({data.title})</span> : null}
             </div>
@@ -123,14 +124,14 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
               </p>
             ) : null}
             <div className='flex mb-2'>
-              {Calendar(20, 20, 'd97706')}
+              {Calendar(20, 20, COLOR_PRIMARY)}
               <span className='text-slate-400 ml-2'>
                 Joined on {dayjs(data?.joined).format('MMM YYYY')}
               </span>
             </div>
             {data?.location ? (
               <div className='flex mb-2'>
-                {Location(22, 22, 'd97706')}
+                {Location(22, 22, COLOR_PRIMARY)}
                 <div className="text-slate-400 ml-2">
                   {data.location}
                 </div>

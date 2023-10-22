@@ -7,8 +7,17 @@ import { Modal, useModal } from '~/hooks/useModal';
 
 // utils
 import { COLOR_PRIMARY } from '~/utils/conts';
-import { Twitter } from '~/utils/svgs';
+import { Github, GoogleColor, Twitter } from '~/utils/svgs';
 import type { HomeProps } from '~/pages';
+
+function getProviderIcon(name: string) {
+  switch (name) {
+    case 'google':
+      return GoogleColor(22, 22);
+    case 'github':
+      return Github(22, 22, 'fff');
+  }
+}
 
 const WelcomeComponent: FC<HomeProps> = ({ providers }) => {
   const { openModal, modalProps } = useModal();
@@ -18,9 +27,12 @@ const WelcomeComponent: FC<HomeProps> = ({ providers }) => {
       return (
         <div key={provider.name} className="mt-1">
           <button
-            className="bg-transparent border-2 border-slate-600 rounded-full h-12 w-full font-bold hover:bg-slate-600 transition-all"
+            className="flex items-center justify-center bg-transparent border-2 border-slate-600 rounded-full h-12 w-full font-bold hover:bg-slate-600 transition-all"
             onClick={() => void signIn(provider.id)}>
-            {`Sign ${isSignin ? 'up' : 'in'} with ${provider.name}`}
+            <span className="mr-2">
+              {getProviderIcon(provider.name.toLowerCase())}
+            </span>
+            {`Sign ${isSignin ? 'in' : 'up'} with ${provider.name}`}
           </button>
         </div>
       );
@@ -33,7 +45,9 @@ const WelcomeComponent: FC<HomeProps> = ({ providers }) => {
         {...modalProps}
         title='Sign In'
       >
-        <AuthProviderButtons isSignin={true} />
+        <div className="w-80 m-auto">
+          <AuthProviderButtons isSignin={true} />
+        </div>
       </Modal>
       <div className="flex w-screen h-screen items-center justify-center">
         <div className="w-1/2 flex justify-center">

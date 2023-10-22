@@ -2,12 +2,14 @@
 import type { FC } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '@prisma/client';
 import type { User } from '@prisma/client';
+
+// utils
 import { Comment, Like, Retweet } from '~/utils/svgs';
+import { COLOR_PRIMARY } from '~/utils/conts';
 
 dayjs.extend(relativeTime);
 
@@ -52,15 +54,15 @@ const Post: FC<ComponentProps> = ({ post, user }) => {
         </div>
         <div className="flex justify-between w-full pt-4 pr-8">
           <div className='flex'>
-            {Comment(24, 24, 'd97706')}
+            {Comment(24, 24, COLOR_PRIMARY)}
             <span className="ml-3">0</span>
           </div>
           <div className='flex'>
-            {Like(24, 24, 'd97706')}
+            {Like(24, 24, COLOR_PRIMARY)}
             <span className="ml-3">{post?.likes}</span>
           </div>
           <div className='flex'>
-            {Retweet(24, 24, 'd97706')}
+            {Retweet(24, 24, COLOR_PRIMARY)}
             <span className="ml-3">{post?.retweets}</span>
           </div>
         </div>

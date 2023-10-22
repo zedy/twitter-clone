@@ -4,6 +4,8 @@ import { useSession, signOut } from 'next-auth/react';
 
 // components
 import Sidenav from '../sideNav/sideNav.component';
+import { Logout } from '~/utils/svgs';
+import { COLOR_PRIMARY } from '~/utils/conts';
 
 interface ComponentProps {
   children: JSX.Element | JSX.Element[];
@@ -13,6 +15,17 @@ interface ComponentProps {
 const CenterComponent: FC<ComponentProps> = ({ children, title }) => {
   const { status } = useSession();
 
+  const SignoutButton = () => (
+    <button
+      className="flex justify-center items-center hover:text-amber-600 transition-all"
+      onClick={() => void signOut()}>
+      <span>Sign out</span>
+      <span className="rotate-180 ml-2">
+        {Logout(20, 20, COLOR_PRIMARY)}
+      </span>
+    </button>
+  )
+
   return (
     <main className="center-component flex justify-center">
       <Sidenav />
@@ -20,7 +33,7 @@ const CenterComponent: FC<ComponentProps> = ({ children, title }) => {
         <div className="flex p-4 w-full border-b border-gray-600 justify-between">
           <strong>{title}</strong>
           <div className="flex">
-            {status === 'authenticated' && <button className="" onClick={() => void signOut()}>Sign out</button>}
+            {status === 'authenticated' && <SignoutButton />}
           </div>
         </div>
         {children}

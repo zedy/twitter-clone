@@ -1,14 +1,18 @@
+// libs
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSession } from 'next-auth/react';
+import { useCallback, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import * as yup from "yup";
-import FormError from '../forms/error.component';
+
+// utils
 import { Return, Twitter } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
-import { useSession } from 'next-auth/react';
-import useDebounce from '~/hooks/useDebounce';
-import { useCallback, useEffect, useState } from 'react';
 import { api } from '~/utils/api';
-import toast from 'react-hot-toast';
+
+// components
+import FormError from '../forms/error.component';
 import { LoadingOverlay } from '../spinner/loading.component';
 
 export const schemaValidation = yup
@@ -41,9 +45,6 @@ const HandleChange = () => {
     enabled: false,
     retry: false,
   });
-
-  console.log('check query: ', handleCheck);
-  console.log('session: ', session);
 
   useEffect(() => {
     if (handleCheck) {

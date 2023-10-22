@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FC } from 'react';
+
+// contexts
 import { ModalContext } from '~/modules/context/modalContext';
 
+// utils
+import { COLOR_PRIMARY } from '~/utils/conts';
 import { Cross } from '~/utils/svgs';
 
 interface ModalProps {
@@ -39,7 +43,7 @@ export const Modal: FC<ModalProps> = ({
             <div className='flex items-center'>
               <span
                 onClick={closeModal}
-                className="cursor-pointer">{Cross(25, 25, 'd97706')}</span>
+                className="cursor-pointer">{Cross(25, 25, COLOR_PRIMARY)}</span>
               {title ? <h3 className="ml-5 text-lg"><b>{title}</b></h3> : null}
             </div>
             {action ? <div>

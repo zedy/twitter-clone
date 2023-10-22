@@ -1,25 +1,29 @@
+// libs
 import Link from 'next/link';
+
+// utils
+import { COLOR_PRIMARY } from '~/utils/conts';
 import { Bell, Home, Profile, Twitter, TwitterOutline } from '~/utils/svgs';
 
 const Sidenav = () => {
   return (
     <div className="flex flex-col w-60 p-4">
-      {Twitter(40, 40, 'd97706')}
+      {Twitter(40, 40, COLOR_PRIMARY)}
       <div className="flex flex-col mt-10">
         <Link href={'/'} className="flex mb-5 items-center">
-          {Home(28, 28, 'd97706')}
+          {Home(24, 24, COLOR_PRIMARY)}
           <span className="ml-5 text-xl">Home</span>
         </Link>
         <Link href={'/'} className="flex mb-5 items-center">
-          {Bell(28, 28, 'd97706')}
+          {Bell(24, 24, COLOR_PRIMARY)}
           <span className="ml-5 text-xl">Notifications</span>
         </Link>
         <Link href={'/'} className="flex mb-5 items-center">
-          {Profile(28, 28, 'd97706')}
+          {Profile(24, 24, COLOR_PRIMARY)}
           <span className="ml-5 text-xl">Profile</span>
         </Link>
         <Link href={'/'} className="flex mb-5 items-center">
-          {TwitterOutline(28, 28, 'd97706')}
+          {TwitterOutline(24, 24, COLOR_PRIMARY)}
           <span className="ml-5 text-xl">Premium</span>
         </Link>
       </div>

@@ -55,8 +55,6 @@ const CreatePostWizzard = () => {
     toast.error(errors.content.message);
   }
 
-
-
   return (
     <div className="post-wizzard flex items-center w-full">
       <div className="rounded-full mr-2 overflow-hidden" style={{ minWidth: '40px' }}>

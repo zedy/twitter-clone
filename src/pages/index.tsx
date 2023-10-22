@@ -1,4 +1,5 @@
 // libs
+import type { FC } from 'react';
 import { useSession } from 'next-auth/react';
 import { getProviders } from 'next-auth/react';
 import type { GetServerSideProps } from 'next';
@@ -8,7 +9,6 @@ import HandleChange from '~/modules/auth/handleChange.component';
 import { LoadingPage } from '~/modules/spinner/loading.component';
 import WelcomeComponent from '~/modules/welcome/welcome.component';
 import HomePage from '~/modules/homepage/homepage.component';
-import type { FC } from 'react';
 
 export interface HomeProps {
   providers: [
@@ -20,7 +20,7 @@ export interface HomeProps {
 }
 
 const Home: FC<HomeProps> = ({ providers }) => {
-  const { status, data } = useSession();
+  const { data } = useSession();
 
   if (data === undefined) {
     return <LoadingPage />;
