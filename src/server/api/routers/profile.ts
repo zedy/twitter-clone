@@ -34,8 +34,35 @@ export const profileRouter = createTRPCRouter({
       dob: z.date(),
       name: z.string(),
       email: z.string().email(),
+      handleChosen: z.boolean(),
     })
   ).mutation(async ({ ctx, input }) => {
+    // check if handle or email are already in DB
+    const results = await ctx.db.user.findFirst({
+      where: {
+        OR: [
+          {
+            username: {
+              equals: input.username
+            },
+          },
+          {
+            email: {
+              equals: input.email
+            },
+          },
+        ],
+      }
+    });
+
+    if (results) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Handle or email already taken',
+        cause: results,
+      });
+    }
+
     const user = await ctx.db.user.create({
       data: {
         ...input

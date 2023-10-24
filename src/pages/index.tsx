@@ -9,6 +9,8 @@ import HandleChange from '~/modules/auth/handleChange.component';
 import { LoadingPage } from '~/modules/spinner/loading.component';
 import WelcomeComponent from '~/modules/welcome/welcome.component';
 import HomePage from '~/modules/homepage/homepage.component';
+import { ModalContextProvider } from '~/modules/context/modalContext';
+import { SignupContextProvider } from '~/modules/context/signupContext';
 
 export interface HomeProps {
   providers: [
@@ -27,7 +29,13 @@ const Home: FC<HomeProps> = ({ providers }) => {
   }
 
   if (!data) {
-    return <WelcomeComponent providers={providers} />;
+    return (
+      <ModalContextProvider>
+        <SignupContextProvider>
+          <WelcomeComponent providers={providers} />
+        </SignupContextProvider>
+      </ModalContextProvider>
+    );
   }
 
   return data?.user?.handleChosen ? <HomePage /> : <HandleChange />

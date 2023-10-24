@@ -16,6 +16,7 @@ interface ModalProps {
   action?: JSX.Element,
   title?: string,
   closeOnBgClick?: boolean;
+  modalCloseCallback?: () => void;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -25,6 +26,7 @@ export const Modal: FC<ModalProps> = ({
   open = false,
   title = null,
   closeOnBgClick = true,
+  modalCloseCallback = null,
 }) => {
   const { isLoading } = useContext(ModalContext);
 
@@ -32,12 +34,17 @@ export const Modal: FC<ModalProps> = ({
     return null;
   }
 
+  function onModalCloseCallCallback() {
+    modalCloseCallback && modalCloseCallback();
+    closeModal();
+  }
+
   return (
     <div
       className="modal fixed w-screen h-screen z-10"
       style={{ display: open ? 'block' : 'none' }}>
       <div
-        onClick={closeOnBgClick ? closeModal : () => null}
+        onClick={closeOnBgClick ? onModalCloseCallCallback : () => null}
         className="modal-bg cursor-pointer bg-slate-500 opacity-50 absolute w-full h-full"></div>
       <div className="modal-body bg-slate-900 rounded-xl w-[480px] min-h-[150px] absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
         <div className='relative h-full'>
@@ -47,7 +54,7 @@ export const Modal: FC<ModalProps> = ({
           <div className="modal-header flex justify-between border-b border-slate-400 p-5">
             <div className='flex items-center'>
               <span
-                onClick={closeModal}
+                onClick={onModalCloseCallCallback}
                 className="cursor-pointer">{Cross(25, 25, COLOR_PRIMARY)}</span>
               {title ? <h3 className="ml-5 text-lg"><b>{title}</b></h3> : null}
             </div>

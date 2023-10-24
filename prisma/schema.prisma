@@ -102,7 +102,7 @@ enum PostType {
 
 // Necessary for Next auth
 // Ignore this table, you should not touch it, i've set it up so hands off
-// Any thing related to the user goes into the User model
+// Anything related to the user goes into the User model
 model Account {
     id                       String  @id @default(cuid())
     userId                   String

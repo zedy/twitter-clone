@@ -1,17 +1,13 @@
 // libs
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import toast from 'react-hot-toast';
 import * as yup from "yup";
 import { useContext } from 'react';
-
-// utils
-import { api } from '~/utils/api';
+import dayjs from 'dayjs';
 
 // components
 import FormError from '../forms/error.component';
-import { ModalContext } from '../context/modalContext';
-import { SignupContext, Step } from '../context/signupContext';
+import { SignupContext } from '../context/signupContext';
 
 export const schemaValidation = yup
   .object({
@@ -29,9 +25,8 @@ type FormData = {
   dob: Date;
 }
 
-const CreateAccountForm = () => {
-  const { setIsLoading } = useContext(ModalContext);
-  const { setStep, setName } = useContext(SignupContext);
+const CreateAccountFormStep1 = () => {
+  const { dispatch, state } = useContext(SignupContext);
   const {
     register,
     handleSubmit,
@@ -40,26 +35,13 @@ const CreateAccountForm = () => {
     resolver: yupResolver(schemaValidation),
   });
 
-  const { mutate } = api.profile.updateHandle.useMutation({
-    onSuccess: () => {
-      setIsLoading(false);
-      setStep(Step.step2);
-    },
-    onError: (error) => {
-      // show error in tostrrr
-      toast.error(error.message);
-      setIsLoading(false);
-    },
-  });  
-
   const onFormSubmit = (data: FormData) => {
-    setIsLoading(true);
-    setName(data.name);
-    // no users have that handle
-    // if (refetchedData === null) {
-    //   mutate({ ...data, id: session?.user.id ?? '' });
-    // }  
-    console.log(Object.assign(data, { handleChosen: true }));
+    dispatch({
+      type: 'basic_info',
+      payload: {
+        ...data,
+      }
+    });
   };
 
   return (
@@ -69,17 +51,19 @@ const CreateAccountForm = () => {
           <span>Name *</span>
           <input
             {...register('name')}
+            defaultValue={state.fields.name}
             type='text'
-            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-14 text-2xl font-light"
+            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-12 text-xl font-light"
           />
           {errors && errors?.name ? <FormError message={errors.name.message!} /> : null}
         </label>
         <label className='flex flex-col mb-4 relative'>
-          Handle *
+          @Handle *
           <input
             {...register('username')}
+            defaultValue={state.fields.username}
             type='text'
-            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-14 text-2xl font-light"
+            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-12 text-xl font-light"
           />
           {errors && errors?.username ? <FormError message={errors.username.message!} /> : null}
         </label>
@@ -87,8 +71,9 @@ const CreateAccountForm = () => {
           Email *
           <input
             {...register('email')}
+            defaultValue={state.fields.email}
             type='email'
-            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-14 text-2xl font-light"
+            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-12 text-xl font-light"
           />
           {errors && errors?.email ? <FormError message={errors.email.message!} /> : null}
         </label>
@@ -96,8 +81,9 @@ const CreateAccountForm = () => {
           Date of birth *
           <input
             {...register('dob')}
+            defaultValue={state.fields.dob ? dayjs(state.fields.dob).format('YYYY-MM-DD') : ''}
             type='date'
-            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-14 text-2xl font-light"
+            className="bg-gray-800 w-full outline-none p-1 rounded-lg border-b border-slate-400 h-12 text-xl font-light"
           />
           {errors && errors?.dob ? <FormError message={errors.dob.message!} /> : null}
         </label>
@@ -108,11 +94,11 @@ const CreateAccountForm = () => {
           type='submit'
           className="h-12 mt-12 font-bold transition-all text-amber-600 border-amber-600 border-2 rounded-full w-full hover:bg-amber-600 hover:text-slate-800"
         >
-          Create
+          Next
         </button>
       </form>
     </div>
   )
 }
 
-export default CreateAccountForm;
+export default CreateAccountFormStep1;
