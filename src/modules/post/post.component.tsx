@@ -5,11 +5,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '@prisma/client';
-import type { User } from '@prisma/client';
+import type { Like, User } from '@prisma/client';
 
 // utils
-import { Comment, Like, Retweet } from '~/utils/svgs';
+import { Comment, Retweet } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
+import LikeComponent from './like/like.component';
 
 dayjs.extend(relativeTime);
 
@@ -19,7 +20,6 @@ interface ComponentProps {
 }
 
 const Post: FC<ComponentProps> = ({ post, user }) => {
-  console.log(post);
   return (
     <div className="flex items-start p-3 w-full border-b border-slate-600">
       <div className="rounded-full overflow-hidden mr-3">
@@ -57,10 +57,7 @@ const Post: FC<ComponentProps> = ({ post, user }) => {
             {Comment(24, 24, COLOR_PRIMARY)}
             <span className="ml-3">0</span>
           </div>
-          <div className='flex'>
-            {Like(24, 24, COLOR_PRIMARY)}
-            <span className="ml-3">{post?.likes}</span>
-          </div>
+          <LikeComponent postId={post.id} likes={post?.likes as [Like]} />
           <div className='flex'>
             {Retweet(24, 24, COLOR_PRIMARY)}
             <span className="ml-3">{post?.retweets}</span>

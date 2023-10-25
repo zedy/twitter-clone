@@ -16,7 +16,7 @@ model Post {
     content   String   @db.VarChar(255)
     retweets  Int      @default(0)
     media     String?
-    likes     Int      @default(0)
+    likes     Like[]
     location  String?  @db.VarChar(255)
     User      User?    @relation(fields: [userId], references: [id])
     userId    String?
@@ -38,13 +38,15 @@ model Post {
 //     @@map(name: "replies")
 // }
 
-// model Likes {
-//     id       String @id @default(cuid())
-//     postId   String
-//     username String
+model Like {
+    id     String @id @default(cuid())
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+    post   Post   @relation(fields: [postId], references: [id])
+    postId String
 
-//     @@index([postId, username])
-// }
+    // @@id([postId, userId])
+}
 
 // model Followers {
 //     id          String @id @default(cuid())
@@ -69,24 +71,25 @@ model Session {
 // When a new person signups on the platform next-auth will automatically
 // create a new account and user model for them. Ain't that nice :)
 model User {
-    id            String      @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String?
-    username      String?     @unique @default(cuid())
-    email         String?     @unique
+    username      String?   @unique @default(cuid())
+    email         String?   @unique
     emailVerified DateTime?
     image         String?
     dob           DateTime?
     gender        Gender?
     location      String?
-    bio           String?     @db.VarChar(500)
+    bio           String?   @db.VarChar(500)
     title         String?
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
-    joined        DateTime?   @default(now())
+    joined        DateTime? @default(now())
     // followedBy    Followers[] @relation("following")
     // following     Followers[] @relation("follower")
-    handleChosen  Boolean     @default(false)
+    handleChosen  Boolean   @default(false)
+    Like          Like[]
 }
 
 enum Gender {

@@ -29,7 +29,7 @@ type FormData = {
 }
 
 const HandleChange = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const {
     watch,
     register,
@@ -55,8 +55,9 @@ const HandleChange = () => {
   }, [handleCheck]);
 
   const { mutate, isLoading } = api.profile.updateHandle.useMutation({
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       toast.success(`Congrats! Your new @handle is ${response.username}`);
+      await update(); 
     },
     onError: (error) => {
       // show error in tostrrr
