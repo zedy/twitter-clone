@@ -48,15 +48,15 @@ model Like {
     // @@id([postId, userId])
 }
 
-// model Followers {
-//     id          String @id @default(cuid())
-//     follower    User   @relation("follower", fields: [followerId], references: [id])
-//     followerId  String
-//     following   User   @relation("following", fields: [followingId], references: [id])
-//     followingId String
+model Followers {
+    id          String @id @default(cuid())
+    follower    User   @relation("follower", fields: [followerId], references: [id])
+    followerId  String
+    following   User   @relation("following", fields: [followingId], references: [id])
+    followingId String
 
-//     @@index([followerId, followingId])
-// }
+    @@index([followerId, followingId])
+}
 
 // This is used by next-auth, don't touch it!
 model Session {
@@ -71,25 +71,25 @@ model Session {
 // When a new person signups on the platform next-auth will automatically
 // create a new account and user model for them. Ain't that nice :)
 model User {
-    id            String    @id @default(cuid())
+    id            String      @id @default(cuid())
     name          String?
-    username      String?   @unique @default(cuid())
-    email         String?   @unique
+    username      String?     @unique @default(cuid())
+    email         String?     @unique
     emailVerified DateTime?
     image         String?
     dob           DateTime?
     gender        Gender?
     location      String?
-    bio           String?   @db.VarChar(500)
+    bio           String?     @db.VarChar(500)
     title         String?
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
-    joined        DateTime? @default(now())
-    // followedBy    Followers[] @relation("following")
-    // following     Followers[] @relation("follower")
-    handleChosen  Boolean   @default(false)
+    joined        DateTime?   @default(now())
+    handleChosen  Boolean     @default(false)
     Like          Like[]
+    Followers     Followers[] @relation("follower")
+    Following     Followers[] @relation("following")
 }
 
 enum Gender {

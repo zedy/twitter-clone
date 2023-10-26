@@ -11,7 +11,7 @@ import { Github, GoogleColor, Twitter } from '~/utils/svgs';
 import type { HomeProps } from '~/pages';
 import CreateAccount from '../account/createAccount';
 import SignInForm from '../auth/signInForm';
-import { SignupContext, Step } from '../context/signupContext';
+import { SignupContext } from '../context/signupContext';
 
 function getProviderIcon(name: string) {
   switch (name) {

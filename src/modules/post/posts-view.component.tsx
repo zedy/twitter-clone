@@ -19,7 +19,7 @@ const PostsView = () => {
 
   return (
     <div className="flex flex-col">
-      {data?.length ? data.map((post) => <Post key={post.id} post={post} user={post.User} />) : <p className="p-4 text-center">{NO_POSTS_PUBLIC}</p>}
+      {data?.length ? data.map((post) => <Post key={post.id} post={post} />) : <p className="p-4 text-center">{NO_POSTS_PUBLIC}</p>}
     </div>
   )
 }

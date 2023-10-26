@@ -20,7 +20,7 @@ interface ComponentProps {
   postId: string;
 }
 
-const LikeComponent: FC<ComponentProps> = ({ postId, likes }) => {
+const Likes: FC<ComponentProps> = ({ postId, likes }) => {
   const { data } = useSession();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [count, setCount] = useState<number>(likes.length);
@@ -85,4 +85,4 @@ const LikeComponent: FC<ComponentProps> = ({ postId, likes }) => {
   );
 };
 
-export default memo(LikeComponent);
+export default memo(Likes);

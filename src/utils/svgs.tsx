@@ -75,12 +75,10 @@ export const Twitter = (w: number, h: number, color: string) => (
     <title>Twitter-color</title>
     <desc>Created with Sketch.</desc>
     <defs>
-
 </defs>
     <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Color-" transform="translate(-300.000000, -164.000000)" fill="#${color}">
             <path d="M348,168.735283 C346.236309,169.538462 344.337383,170.081618 342.345483,170.324305 C344.379644,169.076201 345.940482,167.097147 346.675823,164.739617 C344.771263,165.895269 342.666667,166.736006 340.418384,167.18671 C338.626519,165.224991 336.065504,164 333.231203,164 C327.796443,164 323.387216,168.521488 323.387216,174.097508 C323.387216,174.88913 323.471738,175.657638 323.640782,176.397255 C315.456242,175.975442 308.201444,171.959552 303.341433,165.843265 C302.493397,167.339834 302.008804,169.076201 302.008804,170.925244 C302.008804,174.426869 303.747139,177.518238 306.389857,179.329722 C304.778306,179.280607 303.256911,178.821235 301.9271,178.070061 L301.9271,178.194294 C301.9271,183.08848 305.322064,187.17082 309.8299,188.095341 C309.004402,188.33225 308.133826,188.450704 307.235077,188.450704 C306.601162,188.450704 305.981335,188.390033 305.381229,188.271578 C306.634971,192.28169 310.269414,195.2026 314.580032,195.280607 C311.210424,197.99061 306.961789,199.605634 302.349709,199.605634 C301.555203,199.605634 300.769149,199.559408 300,199.466956 C304.358514,202.327194 309.53689,204 315.095615,204 C333.211481,204 343.114633,188.615385 343.114633,175.270495 C343.114633,174.831347 343.106181,174.392199 343.089276,173.961719 C345.013559,172.537378 346.684275,170.760563 348,168.735283" id="Twitter">
-
 </path>
         </g>
     </g>
@@ -164,14 +162,6 @@ export const LikeFilled = (w: number, h: number, color: string) => (
   `}}></div>
 );
 
-export const Comment = (w: number, h: number, color: string) => (
-  <div dangerouslySetInnerHTML={{
-    __html: `
-    <?xml version="1.0" encoding="utf-8"?>
-    <svg width="${w}px" height="${h}px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;stroke:#${color};stroke-miterlimit:10;stroke-width:1.91px;}</style></defs><path class="cls-1" d="M1.5,5.3v9.54a3.82,3.82,0,0,0,3.82,3.82H7.23v2.86L13,18.66h5.73a3.82,3.82,0,0,0,3.82-3.82V5.3a3.82,3.82,0,0,0-3.82-3.82H5.32A3.82,3.82,0,0,0,1.5,5.3Z"/></svg>
-  `}}></div>
-);
-
 export const Retweet = (w: number, h: number, color: string) => (
   <div dangerouslySetInnerHTML={{
     __html: `
@@ -232,6 +222,30 @@ export const Logout = (w: number, h: number, color: string) => (
     <?xml version="1.0" encoding="utf-8"?>
     <svg width="${w}px" height="${h}px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M15 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H15M8 8L4 12M4 12L8 16M4 12L16 12" stroke="#${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `}}></div>
+);
+
+export const ReplyFilled = (w: number, h: number, color: string) => (
+  <div dangerouslySetInnerHTML={{
+    __html: `
+    <?xml version="1.0" encoding="utf-8"?>
+    <svg width="${w}px" height="${h}px" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
+    <g id="comment-Filled">
+    <path id="comment-Filled-2" fill="#${color}" data-name="comment-Filled" class="cls-1" d="M21.5,8v6A4.505,4.505,0,0,1,17,18.5H6.829a1.491,1.491,0,0,0-1.061.439L3.354,21.354A.5.5,0,0,1,3,21.5a.512.512,0,0,1-.191-.038A.5.5,0,0,1,2.5,21V8A4.505,4.505,0,0,1,7,3.5H17A4.505,4.505,0,0,1,21.5,8Z"/>
+    </g>
+    </svg>
+  `}}></div>
+);
+
+export const ReplyOutline = (w: number, h: number, color: string) => (
+  <div dangerouslySetInnerHTML={{
+    __html: `
+    <?xml version="1.0" encoding="utf-8"?>
+    <svg width="${w}px" height="${h}px" viewBox="0 0 24 24" id="magicoon-Regular" xmlns="http://www.w3.org/2000/svg">
+    <g id="comment-Regular">
+    <path id="comment-Regular-2" fill="#${color}" data-name="comment-Regular" class="cls-1" d="M17,3.25H7A4.756,4.756,0,0,0,2.25,8V21a.75.75,0,0,0,1.28.53l2.414-2.414a1.246,1.246,0,0,1,.885-.366H17A4.756,4.756,0,0,0,21.75,14V8A4.756,4.756,0,0,0,17,3.25ZM20.25,14A3.254,3.254,0,0,1,17,17.25H6.829a2.73,2.73,0,0,0-1.945.806L3.75,19.189V8A3.254,3.254,0,0,1,7,4.75H17A3.254,3.254,0,0,1,20.25,8Z"/>
+    </g>
     </svg>
   `}}></div>
 );

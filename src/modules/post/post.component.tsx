@@ -1,71 +1,86 @@
 // libs
-import type { FC } from 'react';
+import { type FC, memo } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Post } from '@prisma/client';
+import type { Post as PostType } from '@prisma/client';
 import type { Like, User } from '@prisma/client';
 
 // utils
-import { Comment, Retweet } from '~/utils/svgs';
+import { Retweet } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
-import LikeComponent from './like/like.component';
+import Replies from './replies/replies.component';
+import Likes from './likes/likes.component';
 
 dayjs.extend(relativeTime);
 
-interface ComponentProps {
-  user: User,
-  post: Post,
+export interface PostWithUser extends PostType {
+  User: User;
+  likes: [Like];
 }
 
-const Post: FC<ComponentProps> = ({ post, user }) => {
-  return (
-    <div className="flex items-start p-3 w-full border-b border-slate-600">
-      <div className="rounded-full overflow-hidden mr-3">
-        <Link href={`/@${user?.username}`}>
-          {true ? (
+interface ComponentProps {
+  post: PostWithUser,
+}
+
+const Post: FC<ComponentProps> = ({ post }) => {
+  function tweet(isReply = false) {
+    return (
+      <div className={`flex relative items-start w-ful ${isReply ? 'mb-8' : 'p-3 border-b border-slate-600'}`}>
+        <div className="rounded-full overflow-hidden mr-3">
+          <Link href={`/@${post?.User?.username}`}>
             <Image
-              src={user?.image ?? ''}
-              alt={user?.username ?? ''}
-              width={48}
-              height={48}
+              src={post?.User?.image ?? ''}
+              alt={post?.User?.username ?? ''}
+              width={isReply ? 40 : 48}
+              height={isReply ? 40 : 48}
             />
-          ) : (
-            <div>loading</div> // remove this user is always true ? 
-          )}
-        </Link>
-      </div>
-      <div className="flex flex-col flex-grow">
-        <div>
-          <Link href={`/@${user?.username}`}>
-            <b>{`${user?.name}`}</b>
-            <span className="ml-2 font-thin text-sm text-slate-300">@{user?.username}</span>
-          </Link>
-          <span className="font-thin opacity-50"> • </span>
-          <Link href={`/post/${post?.id}`}>
-            <span className="font-thin text-sm text-slate-300 hover:underline">
-              {dayjs(post?.createdAt).fromNow()}
-            </span>
           </Link>
         </div>
-        <div>
-          {post?.content}
-        </div>
-        <div className="flex justify-between w-full pt-4 pr-8">
-          <div className='flex'>
-            {Comment(24, 24, COLOR_PRIMARY)}
-            <span className="ml-3">0</span>
+        <div className="flex flex-col flex-grow relative">
+          {isReply && <div className="absolute -left-8 top-12 border-l-2 h-[calc(100%-20px)] border-slate-600"></div>}
+          <div>
+            <Link href={`/@${post?.User?.username}`}>
+              <b>{post?.User?.name}</b>
+              <span className="ml-2 font-thin text-sm text-slate-300">@{post?.User?.username}</span>
+            </Link>
+            <span className="font-thin opacity-50"> • </span>
+            <Link href={`/post/${post?.id}`}>
+              <span className="font-thin text-sm text-slate-300 hover:underline">
+                {dayjs(post?.createdAt).fromNow()}
+              </span>
+            </Link>
           </div>
-          <LikeComponent postId={post.id} likes={post?.likes as [Like]} />
-          <div className='flex'>
-            {Retweet(24, 24, COLOR_PRIMARY)}
-            <span className="ml-3">{post?.retweets}</span>
+          <div>
+            {post?.content}
           </div>
+          {isReply ? <div className='text-slate-600 pt-3'>Replying to
+            <Link href={`/@${post?.User?.username}`}>
+              <span className='text-amber-600 pl-1'>
+                @{post?.User?.username}
+              </span>
+            </Link>
+          </div> : tweetActions()}
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  function tweetActions() {
+    return (
+      <div className="flex justify-between w-full pt-4 pr-8">
+        <Replies post={post} replies={[]} originalTweet={tweet} />
+        <Likes postId={post.id} likes={post?.likes as [Like]} />
+        <div className='flex'>
+          {Retweet(24, 24, COLOR_PRIMARY)}
+          <span className="ml-3">{post?.retweets}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return tweet();
 };
 
-export default Post;
+export default memo(Post);

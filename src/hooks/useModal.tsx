@@ -41,7 +41,7 @@ export const Modal: FC<ModalProps> = ({
 
   return (
     <div
-      className="modal fixed w-screen h-screen z-10"
+      className="modal fixed w-screen h-screen z-10 top-0 left-0"
       style={{ display: open ? 'block' : 'none' }}>
       <div
         onClick={closeOnBgClick ? onModalCloseCallCallback : () => null}

@@ -1,4 +1,5 @@
 // libs
+import { type FC, useRef } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form"
@@ -16,8 +17,13 @@ type FormData = {
   content: string;
 }
 
-const CreatePostWizzard = () => {
+interface ComponentProps {
+  isReply?: boolean;
+}
+
+const CreatePostWizzard: FC<ComponentProps> = ({ isReply = false }) => {
   const { data } = useSession();
+  const textAreaRef = useRef(null);
   const apiCtx = api.useContext();
 
   const schema = yup
@@ -56,8 +62,8 @@ const CreatePostWizzard = () => {
   }
 
   return (
-    <div className="post-wizzard flex items-center w-full">
-      <div className="rounded-full mr-2 overflow-hidden" style={{ minWidth: '40px' }}>
+    <div className={`post-wizzard flex w-full ${!isReply && 'items-center'}`}>
+      <div className="rounded-full mr-2 overflow-hidden" style={{ minWidth: '40px', height: '40px' }}>
         {data?.user ? (
           <Image
             src={data.user.image?.toString() ?? ''}
@@ -78,14 +84,29 @@ const CreatePostWizzard = () => {
       </div>
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit(onFormSubmit)}
-        className="flex w-full"
+        className={`flex w-full ${isReply && 'flex-col items-end'}`}
       >
-        <input
-          {...register('content')}
-          type='text'
-          placeholder="What's happening?"
-          className="bg-gray-800 grow outline-none p-1 pl-2 mr-4 rounded-2xl"
-        />
+        {isReply ? (
+          <textarea
+            {...register('content', {
+              onChange: () => {
+                textAreaRef.current.style.height = "auto";
+                textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+              }
+            })}
+            ref={textAreaRef}
+            cols={1}
+            placeholder="What's happening?"
+            className="bg-gray-800 w-full resize-none mb-5 overflow-y-hidden grow outline-none p-1 pl-2 rounded-2xl"
+          />
+        ) : (
+          <input
+            {...register('content')}
+            type='text'
+            placeholder="What's happening?"
+            className="bg-gray-800 grow outline-none p-1 pl-2 mr-4 rounded-2xl"
+          />
+        )}
         <button
           disabled={isLoading}
           className='text-amber-600'
