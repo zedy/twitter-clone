@@ -112,6 +112,10 @@ export const profileRouter = createTRPCRouter({
       const user = await ctx.db.user.findUnique({
         where: {
           username: input.username,
+        },
+        include: {
+          Followers: true,
+          Following: true,
         }
       });
 

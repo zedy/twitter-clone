@@ -6,7 +6,7 @@ import { find } from 'lodash';
 
 // utils
 import { LikeOutline, LikeFilled } from '~/utils/svgs';
-import { COLOR_PRIMARY } from '~/utils/conts';
+import { COLOR_PRIMARY, LOGIN_LIKE } from '~/utils/conts';
 import { api } from '~/utils/api';
 import { useSession } from 'next-auth/react';
 import type { Like } from '@prisma/client';
@@ -56,7 +56,7 @@ const Likes: FC<ComponentProps> = ({ postId, likes }) => {
         likeId: userLikedPost ? userLikedPost.id : '',
       });
     } else {
-      toast.error('Please login or register in order to like a tweet');
+      toast.error(LOGIN_LIKE);
     }
   };
 

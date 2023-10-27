@@ -13,7 +13,7 @@ import useDebounceFn from '~/hooks/useDebounceFn';
 
 // utils
 import { ReplyFilled, ReplyOutline } from '~/utils/svgs';
-import { COLOR_PRIMARY } from '~/utils/conts';
+import { COLOR_PRIMARY, LOGIN_REPLY } from '~/utils/conts';
 import { api } from '~/utils/api';
 import CreatePostWizzard from '../post-wizzard.component';
 import type { PostWithUser } from '../post.component';
@@ -51,7 +51,7 @@ const Replies: FC<ComponentProps> = ({ post, replies, originalTweet }) => {
     if (data?.user.id) {
       openModal();
     } else {
-      toast.error('Please login or register in order to leave a reply');
+      toast.error(LOGIN_REPLY);
     }
   };
 

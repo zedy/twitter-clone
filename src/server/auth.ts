@@ -22,15 +22,11 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string;
       handleChosen?: boolean;
+      username?: string;
       // ...other properties
       // role: UserRole;
     };
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**

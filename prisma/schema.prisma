@@ -44,8 +44,6 @@ model Like {
     userId String
     post   Post   @relation(fields: [postId], references: [id])
     postId String
-
-    // @@id([postId, userId])
 }
 
 model Followers {
@@ -88,8 +86,8 @@ model User {
     joined        DateTime?   @default(now())
     handleChosen  Boolean     @default(false)
     Like          Like[]
-    Followers     Followers[] @relation("follower")
-    Following     Followers[] @relation("following")
+    Followers     Followers[] @relation("following")
+    Following     Followers[] @relation("follower")
 }
 
 enum Gender {
