@@ -8,7 +8,9 @@ import { api } from '~/utils/api';
 
 // components/modules
 import CenterComponent from '~/modules/layout/center.component';
-import Post from '~/modules/post/post.component';
+import { LoadingPage } from '~/modules/spinner/loading.component';
+import PostPageComponent from '~/modules/post/post-page.component';
+;
 
 function trimContent(content: string) {
   if (content.length < 10) return content;
@@ -17,21 +19,25 @@ function trimContent(content: string) {
 }
 
 const SinglePostPage: NextPage<{ postId: string }> = ({ postId }) => {
-  const { data, isError } = api.posts.getPostById.useQuery({ postId });
+  const { data, isError, isLoading } = api.posts.getPostById.useQuery({ postId });
 
-  if (isError || !data || data.length < 0) {
+  if (isError || !data) {
     return <div>Error!</div>;
   }
 
-  const { post, author } = data[0]!;
+  if (isLoading) {
+    return <LoadingPage />
+  }
+
+  const { User } = data;
 
   return (
     <>
       <Head>
-        <title>{`${trimContent(post?.content)} - @${author?.userName}`}</title>
+        <title>{`@${User?.username} - ${trimContent(data.content)}`}</title>
       </Head>
       <CenterComponent title='Post'>
-        <Post post={post} author={author} />
+        <PostPageComponent post={data} />
       </CenterComponent>
     </>
   );

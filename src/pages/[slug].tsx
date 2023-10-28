@@ -292,6 +292,16 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
               </div>
             </div>
           ) : null}
+          <div className='flex mb-2'>
+            <div>
+              <span className='mr-1'>{data?.Following.length}</span>
+              <span className='text-slate-400'>Following</span>
+            </div>
+            <div className='ml-3'>
+              <span className='mr-1'>{data?.Followers.length}</span>
+              <span className='text-slate-400'>Followers</span>
+            </div>
+          </div>
         </div>
         <div className="w-full border-b border-slate-400" />
         <ProfileTabs />

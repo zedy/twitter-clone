@@ -6,22 +6,24 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Post } from '@prisma/client';
 import type { User } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 
 dayjs.extend(relativeTime);
 
 interface ComponentProps {
-  user: User,
   post: Post,
 }
 
-const ReplyTweet: FC<ComponentProps> = ({ post, user }) => {
+const ReplyTweet: FC<ComponentProps> = ({ post }) => {
+  const { data } = useSession();
+
   return (
     <div className="flex items-start p-3 w-full">
       <div className="rounded-full overflow-hidden mr-3">
-        <Link href={`/@${user?.username}`}>
+        <Link href={`/@${data?.user?.username}`}>
           <Image
-            src={user?.image ?? ''}
-            alt={user?.username ?? ''}
+            src={data?.user?.image ?? ''}
+            alt={data?.user?.username ?? ''}
             width={48}
             height={48}
           />
@@ -29,9 +31,9 @@ const ReplyTweet: FC<ComponentProps> = ({ post, user }) => {
       </div>
       <div className="flex flex-col flex-grow">
         <div>
-          <Link href={`/@${user?.username}`}>
-            <b>{`${user?.name}`}</b>
-            <span className="ml-2 font-thin text-sm text-slate-300">@{user?.username}</span>
+          <Link href={`/@${data?.user?.username}`}>
+            <b>{`${data?.user?.name}`}</b>
+            <span className="ml-2 font-thin text-sm text-slate-300">@{data?.user?.username}</span>
           </Link>
           <span className="font-thin opacity-50"> • </span>
           <Link href={`/post/${post?.id}`}>

@@ -9,7 +9,7 @@ import { appRouter } from '~/server/api/root';
 export const helpers = createServerSideHelpers({
   router: appRouter,
   ctx: {
-    db, userId: null, session: null,
+    db, session: null,
   },
   transformer: superjson,
 });

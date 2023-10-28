@@ -1,5 +1,5 @@
 // libs
-import { type FC, useRef } from 'react';
+import { type FC, useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form"
@@ -18,13 +18,20 @@ type FormData = {
 }
 
 interface ComponentProps {
-  isReply?: boolean;
+  isModal?: boolean;
 }
 
-const CreatePostWizzard: FC<ComponentProps> = ({ isReply = false }) => {
+const PostReply: FC<ComponentProps> = ({ isModal = false }) => {
   const { data } = useSession();
   const textAreaRef = useRef(null);
   const apiCtx = api.useContext();
+  const [active, setActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isModal) {
+      setActive(true);
+    }
+  }, [])
 
   const schema = yup
     .object({
@@ -52,6 +59,12 @@ const CreatePostWizzard: FC<ComponentProps> = ({ isReply = false }) => {
     },
   });
 
+  const handleFocus = () => {
+    if (!isModal) {
+      setActive(true);
+    }
+  }
+
   const onFormSubmit = (data: FormData) => {
     mutate({ content: data.content });
     reset();
@@ -62,7 +75,7 @@ const CreatePostWizzard: FC<ComponentProps> = ({ isReply = false }) => {
   }
 
   return (
-    <div className={`post-wizzard flex w-full ${!isReply && 'items-center'}`}>
+    <div className='post-wizzard flex w-full'>
       <div className="rounded-full mr-2 overflow-hidden" style={{ minWidth: '40px', height: '40px' }}>
         {data?.user ? (
           <Image
@@ -84,36 +97,28 @@ const CreatePostWizzard: FC<ComponentProps> = ({ isReply = false }) => {
       </div>
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit(onFormSubmit)}
-        className={`flex w-full ${isReply && 'flex-col items-end'}`}
+        onFocus={handleFocus}
+        className={`flex w-full ${active ? 'flex-col items-end' : 'items-start'}`}
       >
-        {isReply ? (
-          <textarea
-            {...register('content', {
-              onChange: () => {
-                textAreaRef.current.style.height = "auto";
-                textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
-              }
-            })}
-            ref={textAreaRef}
-            cols={1}
-            placeholder="Leave a reply ..."
-            className="bg-gray-800 w-full resize-none mb-5 overflow-y-hidden grow outline-none p-1 pl-2 rounded-2xl"
-          />
-        ) : (
-          <input
-            {...register('content')}
-            type='text'
-            placeholder="What's happening?"
-            className="bg-gray-800 grow outline-none p-1 pl-2 mr-4 rounded-2xl"
-          />
-        )}
+        <textarea
+          {...register('content', {
+            onChange: () => {
+              textAreaRef.current.style.height = "auto";
+              textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+            }
+          })}
+          ref={textAreaRef}
+          cols={1}
+          placeholder="Leave a reply ..."
+          className="bg-gray-800 w-full resize-none mb-3 overflow-y-hidden grow outline-none p-1 pl-2 rounded-2xl"
+        />
         <button
           disabled={isLoading}
-          className='text-amber-600'
+          className={`text-amber-600 ${!active ? 'ml-5 mt-4' : ''}`}
         >{isLoading ? <Spinner /> : 'Post'}</button>
       </form>
     </div>
   );
 };
 
-export default CreatePostWizzard;
+export default PostReply;

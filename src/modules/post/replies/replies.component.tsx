@@ -2,7 +2,6 @@
 import { type FC, useState, useEffect, memo } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { find } from 'lodash';
 import { useSession } from 'next-auth/react';
 import type { Like } from '@prisma/client';
 import toast from 'react-hot-toast';
@@ -15,18 +14,18 @@ import useDebounceFn from '~/hooks/useDebounceFn';
 import { ReplyFilled, ReplyOutline } from '~/utils/svgs';
 import { COLOR_PRIMARY, LOGIN_REPLY } from '~/utils/conts';
 import { api } from '~/utils/api';
-import CreatePostWizzard from '../post-wizzard.component';
 import type { PostWithUser } from '../post.component';
+import { defaultTweetBody } from '../post-body.component';
+import PostReply from '../post-reply.component';
 
 dayjs.extend(relativeTime);
 
 interface ComponentProps {
   replies: any;
   post: PostWithUser;
-  originalTweet: (arg0: boolean) => JSX.Element;
 }
 
-const Replies: FC<ComponentProps> = ({ post, replies, originalTweet }) => {
+const Replies: FC<ComponentProps> = ({ post, replies }) => {
   const { data } = useSession();
   const { openModal, modalProps } = useModal();
   const [hasCommented, setHasCommented] = useState<boolean>(false);
@@ -68,8 +67,8 @@ const Replies: FC<ComponentProps> = ({ post, replies, originalTweet }) => {
         title='Leave a reply'
       >
         <div className="m-auto">
-          {originalTweet(true)}
-          <CreatePostWizzard isReply={true} />
+          {defaultTweetBody(true, post)}
+          <PostReply isModal={true} />
         </div>
       </Modal>
       <div
