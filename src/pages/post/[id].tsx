@@ -10,7 +10,7 @@ import { api } from '~/utils/api';
 import CenterComponent from '~/modules/layout/center.component';
 import { LoadingPage } from '~/modules/spinner/loading.component';
 import PostPageComponent from '~/modules/post/post-page.component';
-;
+import Post from '~/modules/post/post.component';
 
 function trimContent(content: string) {
   if (content.length < 10) return content;
@@ -30,7 +30,7 @@ const SinglePostPage: NextPage<{ postId: string }> = ({ postId }) => {
   }
 
   const { User } = data;
-
+  console.log(data);
   return (
     <>
       <Head>
@@ -38,6 +38,9 @@ const SinglePostPage: NextPage<{ postId: string }> = ({ postId }) => {
       </Head>
       <CenterComponent title='Post'>
         <PostPageComponent post={data} />
+        <div className="flex flex-col">
+          {data.replies.length > 0 ? data.replies.map((post) => <Post key={post.id} post={post} />) : <div>123</div>}
+        </div>
       </CenterComponent>
     </>
   );

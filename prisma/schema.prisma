@@ -12,17 +12,19 @@ datasource db {
 }
 
 model Post {
-    id        String   @id @default(cuid())
-    content   String   @db.VarChar(255)
-    retweets  Int      @default(0)
-    media     String?
-    likes     Like[]
-    location  String?  @db.VarChar(255)
-    User      User?    @relation(fields: [userId], references: [id])
-    userId    String?
-    type      PostType @default(POST)
-    createdAt DateTime @default(now())
-    // replies   Reply[]  @relation("Replies")
+    id           String   @id @default(cuid())
+    content      String   @db.VarChar(255)
+    retweets     Int      @default(0)
+    media        String?
+    likes        Like[]
+    location     String?  @db.VarChar(255)
+    User         User?    @relation(fields: [userId], references: [id])
+    userId       String?
+    type         PostType @default(POST)
+    createdAt    DateTime @default(now())
+    parentPost   Post?    @relation("RepliesTo", fields: [parentPostId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parentPostId String?
+    replies      Post[]   @relation("RepliesTo")
 
     @@index([userId])
     @@map(name: "post")

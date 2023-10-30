@@ -1,16 +1,16 @@
 // libs
-import { type FC, useState, useEffect, memo } from 'react';
+import { type FC, useState, useEffect, memo, useMemo } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { find } from 'lodash';
+import { useSession } from 'next-auth/react';
+import type { Like } from '@prisma/client';
+import toast from 'react-hot-toast';
 
 // utils
 import { LikeOutline, LikeFilled } from '~/utils/svgs';
 import { COLOR_PRIMARY, LOGIN_LIKE } from '~/utils/conts';
 import { api } from '~/utils/api';
-import { useSession } from 'next-auth/react';
-import type { Like } from '@prisma/client';
-import toast from 'react-hot-toast';
 import useDebounceFn from '~/hooks/useDebounceFn';
 
 dayjs.extend(relativeTime);
@@ -24,13 +24,15 @@ const Likes: FC<ComponentProps> = ({ postId, likes }) => {
   const { data } = useSession();
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [count, setCount] = useState<number>(likes.length);
-  // const [likeClasses, setLikeClasses] = useState<string>('heart');
 
-  const userLikedPost: Like | boolean = find(likes, { userId: data?.user.id ?? '' }) ?? false;
+  const userLikedPost: Like | boolean = useMemo(() => {
+    if (!data) return false;
+    return find(likes, { userId: data?.user.id ?? '' }) ?? false;
+  }, [data]);
 
   useEffect(() => {
-    setIsLiked(userLikedPost ? true : false);
-  }, []);
+    if (data) setIsLiked(userLikedPost ? true : false);
+  }, [data]);
 
   const { mutate } = api.likes.handleLike.useMutation({
     onSuccess: (response) => {
@@ -72,15 +74,6 @@ const Likes: FC<ComponentProps> = ({ postId, likes }) => {
       className='flex cursor-pointer'>
       <LikeSvg />
       <span className="ml-3">{count}</span>
-      {/* <div 
-      onClick={() => {
-        if (likeClasses.includes('isAnimating')) {
-          setLikeClasses('heart');
-        } else {
-          setLikeClasses('heart isAnimating');
-        }        
-      }}
-      className={likeClasses}></div> */}
     </div>
   );
 };

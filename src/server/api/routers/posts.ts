@@ -35,6 +35,16 @@ export const postsRouter = createTRPCRouter({
       include: {
         User: true,
         likes: true,
+        replies: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            likes: true,
+            User: true,
+            replies: true,
+          }
+        },
       }
     });
 
@@ -106,5 +116,33 @@ export const postsRouter = createTRPCRouter({
       });
 
       return post;
+    }),
+
+  reply: protectedProcedure
+    .input(
+      z.object({
+        content: z.string().min(1).max(255),
+        postId: z.string(),
+      })
+    ).mutation(async ({ ctx, input }) => {
+      const { success } = await ratelimit.limit(ctx.session.user.id ?? 'anon');
+
+      if (!success) {
+        throw new TRPCError({
+          code: 'TOO_MANY_REQUESTS',
+          message: 'Hey! No spamming!'
+        });
+      }
+
+      const reply = await ctx.db.post.create({
+        data: {
+          userId: ctx.session.user.id ?? '',
+          content: input.content,
+          type: 'REPLY',
+          parentPostId: input.postId,
+        }
+      });
+
+      return reply;
     }),
 });

@@ -1,5 +1,5 @@
 // libs
-import { type FC, useRef, useState, useEffect } from 'react';
+import { type FC, useRef, useState, useEffect, forwardRef } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form"
@@ -12,6 +12,7 @@ import { api } from '~/utils/api';
 
 // components
 import { Spinner } from '../spinner/loading.component';
+import { useRouter } from 'next/router';
 
 type FormData = {
   content: string;
@@ -26,12 +27,13 @@ const PostReply: FC<ComponentProps> = ({ isModal = false }) => {
   const textAreaRef = useRef(null);
   const apiCtx = api.useContext();
   const [active, setActive] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (isModal) {
       setActive(true);
     }
-  }, [])
+  }, []);
 
   const schema = yup
     .object({
@@ -48,9 +50,11 @@ const PostReply: FC<ComponentProps> = ({ isModal = false }) => {
     resolver: yupResolver(schema),
   });
 
-  const { mutate, isLoading } = api.posts.create.useMutation({
+  const { ref, ...rest } = register('content');
+
+  const { mutate, isLoading } = api.posts.reply.useMutation({
     onSuccess: async () => {
-      await apiCtx.posts.getAll.invalidate();
+      await apiCtx.posts.getPostById.invalidate();
     },
     onError: (error) => {
       // show error in tostrrr
@@ -66,7 +70,7 @@ const PostReply: FC<ComponentProps> = ({ isModal = false }) => {
   }
 
   const onFormSubmit = (data: FormData) => {
-    mutate({ content: data.content });
+    mutate({ content: data.content, postId: router.query.id! as string });
     reset();
   }
 
@@ -100,15 +104,14 @@ const PostReply: FC<ComponentProps> = ({ isModal = false }) => {
         onFocus={handleFocus}
         className={`flex w-full ${active ? 'flex-col items-end' : 'items-start'}`}
       >
-        <textarea
-          {...register('content', {
-            onChange: () => {
-              textAreaRef.current.style.height = "auto";
-              textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
-            }
-          })}
-          ref={textAreaRef}
-          cols={1}
+        <textarea {...rest} name="content" ref={(e) => {
+          ref(e);
+          textAreaRef.current = e;
+        }}
+          onChange={() => {
+            textAreaRef.current.style.height = "auto";
+            textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+          }}
           placeholder="Leave a reply ..."
           className="bg-gray-800 w-full resize-none mb-3 overflow-y-hidden grow outline-none p-1 pl-2 rounded-2xl"
         />

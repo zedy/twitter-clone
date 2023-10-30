@@ -1,19 +1,16 @@
 // libs
-import { type FC, useState, useEffect, memo } from 'react';
+import { type FC, memo } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useSession } from 'next-auth/react';
-import type { Like } from '@prisma/client';
 import toast from 'react-hot-toast';
 
 // hooks
 import { Modal, useModal } from '~/hooks/useModal';
-import useDebounceFn from '~/hooks/useDebounceFn';
 
 // utils
 import { ReplyFilled, ReplyOutline } from '~/utils/svgs';
 import { COLOR_PRIMARY, LOGIN_REPLY } from '~/utils/conts';
-import { api } from '~/utils/api';
 import type { PostWithUser } from '../post.component';
 import { defaultTweetBody } from '../post-body.component';
 import PostReply from '../post-reply.component';
@@ -21,30 +18,12 @@ import PostReply from '../post-reply.component';
 dayjs.extend(relativeTime);
 
 interface ComponentProps {
-  replies: any;
   post: PostWithUser;
 }
 
-const Replies: FC<ComponentProps> = ({ post, replies }) => {
+const Replies: FC<ComponentProps> = ({ post }) => {
   const { data } = useSession();
   const { openModal, modalProps } = useModal();
-  const [hasCommented, setHasCommented] = useState<boolean>(false);
-  const [count, setCount] = useState<number>(replies.length);
-
-  //  const userLikedPost: Like | boolean = find(likes, { userId: data?.user.id ?? '' }) ?? false;
-
-  useEffect(() => {
-    setHasCommented(replies.length > 0 ? true : false);
-  }, []);
-
-  const { mutate } = api.likes.handleLike.useMutation({
-    onSuccess: (response) => {
-      console.log('success like:', response);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
 
   const handleClick = () => {
     if (data?.user.id) {
@@ -55,7 +34,7 @@ const Replies: FC<ComponentProps> = ({ post, replies }) => {
   };
 
   const ReplySvg = () => {
-    const COMPONENT = hasCommented ? ReplyFilled : ReplyOutline;
+    const COMPONENT = post.replies.length > 0 ? ReplyFilled : ReplyOutline;
 
     return COMPONENT(24, 24, COLOR_PRIMARY);
   };
@@ -75,7 +54,7 @@ const Replies: FC<ComponentProps> = ({ post, replies }) => {
         onClick={() => handleClick()}
         className='flex cursor-pointer'>
         <ReplySvg />
-        <span className="ml-3">{count}</span>
+        <span className="ml-3">{post.replies.length}</span>
       </div>
     </>
   );

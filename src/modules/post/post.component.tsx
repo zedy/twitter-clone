@@ -19,6 +19,7 @@ dayjs.extend(relativeTime);
 export interface PostWithUser extends PostType {
   User: User;
   likes: [Like];
+  replies: [PostType];
 }
 
 interface ComponentProps {
@@ -29,7 +30,7 @@ const Post: FC<ComponentProps> = ({ post }) => {
   function TweetActions() {
     return (
       <div className="flex justify-between w-full pt-4 pr-8">
-        <Replies post={post} replies={[]} />
+        <Replies post={post} />
         <Likes postId={post.id} likes={post?.likes as [Like]} />
         <div className='flex'>
           {Retweet(24, 24, COLOR_PRIMARY)}

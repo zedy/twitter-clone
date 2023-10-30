@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Post as PostType } from '@prisma/client';
+import type { Post, Post as PostType } from '@prisma/client';
 import type { Like, User } from '@prisma/client';
 
 // utils
@@ -12,9 +12,6 @@ import { Retweet } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
 import Replies from './replies/replies.component';
 import Likes from './likes/likes.component';
-import { defaultTweetBody } from './post-body.component';
-import ReplyTweet from './replies/reply-tweet';
-import CreatePostWizzard from './post-wizzard.component';
 import PostReply from './post-reply.component';
 
 dayjs.extend(relativeTime);
@@ -22,13 +19,18 @@ dayjs.extend(relativeTime);
 export interface PostWithUser extends PostType {
   User: User;
   likes: [Like];
+  replies: [Post];
 }
 
 interface ComponentProps {
-  post: PostWithUser,
+  post: PostWithUser | null,
 }
 
 const PostPage: FC<ComponentProps> = ({ post }) => {
+  if (!post) {
+    return <div></div>;
+  }
+
   return (
     <div className='flex flex-col relative items-start w-ful p-3 border-b border-slate-600'>
       <div className="flex w-full">
@@ -55,7 +57,7 @@ const PostPage: FC<ComponentProps> = ({ post }) => {
           </span>
         </div>
         <div className="flex justify-between w-full mt-5 p-2 pr-4 border border-l-0 border-r-0 border-slate-600">
-          <Replies post={post} replies={[]} />
+          <Replies post={post} />
           <Likes postId={post.id} likes={post?.likes as [Like]} />
           <div className='flex'>
             {Retweet(24, 24, COLOR_PRIMARY)}
@@ -67,7 +69,7 @@ const PostPage: FC<ComponentProps> = ({ post }) => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default memo(PostPage);
