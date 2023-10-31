@@ -10,7 +10,7 @@ const Sidenav = () => {
   const { data } = useSession();
 
   return (
-    <div className="flex flex-col w-60 p-4">
+    <header className="flex flex-col w-60 p-4">
       {Twitter(40, 40, COLOR_PRIMARY)}
       <div className="flex flex-col mt-10">
         <Link href={'/'} className="flex mb-5 items-center">
@@ -31,7 +31,7 @@ const Sidenav = () => {
         </Link>
       </div>
       <button className="bg-amber-600 rounded-full text-slate-800 h-12"><b>POST</b></button>
-    </div>
+    </header>
   )
 }
 

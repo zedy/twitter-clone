@@ -22,3 +22,19 @@ It contains and is built using the following technologies and libraries:
 - [Zod](https://zod.dev/)
 - [Upstash](https://upstash.com/)
 - [React Hook Form + Yup]()
+
+# Todo list 
+(not listed by priority):
+
+- add an image hosting service so we can upload profile images/splash screens
+- re-tweet models
+- responsive
+- create vars in tailwind for main/secondary/action colors
+- update the middleware (right now it doesn't do anything)
+- add notifications? 🤔 [maybe not]
+- add the ability to post pictures/media/urls
+- finish Sign In via email/pass [add pass to account]
+- fix all TS errors 
+- create new github/google oath apps for Vercel and add their ENVs
+- implement character counter for Tweets/Replies
+- refetchOnWindowFocus: disable for some queries?

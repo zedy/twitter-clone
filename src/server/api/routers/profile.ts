@@ -105,6 +105,41 @@ export const profileRouter = createTRPCRouter({
     return results;
   }),
 
+  searchProfiles: publicProcedure.input(
+    z.object({
+      search: z.string(), // validation in component
+    })
+  ).query(async ({ input, ctx }) => {
+    if (!input.search) {
+      return null;
+    }
+
+    const results = await ctx.db.user.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: input.search
+            },
+          },
+          {
+            name: {
+              contains: input.search
+            },
+          },
+        ],
+      },
+      select: {
+        username: true,
+        name: true,
+        image: true,
+        id: true,
+      }
+    });
+
+    return results;
+  }),
+
   getUserByUserName: publicProcedure.input(z.object({
     username: z.string(),
   }))

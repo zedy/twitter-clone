@@ -11,3 +11,5 @@ export const LOGIN_FOLLOW = 'Please login or register in order to follow this pe
 
 // tailwind code: amber-600
 export const COLOR_PRIMARY = 'd97706';
+export const COLOR_SECONDARY_400 = '94a3b8';
+export const COLOR_SECONDARY_600 = '4b5563';
