@@ -67,6 +67,7 @@ export const postsRouter = createTRPCRouter({
       include: {
         User: true,
         likes: true,
+        replies: true,
       }
     });
 
@@ -87,6 +88,7 @@ export const postsRouter = createTRPCRouter({
       include: {
         User: true,
         likes: true,
+        replies: true,
       }
     });
 
