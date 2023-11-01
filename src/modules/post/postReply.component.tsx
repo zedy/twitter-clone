@@ -14,12 +14,11 @@ type FormData = {
 }
 
 interface ComponentProps {
-  isModal?: boolean;
   postId: string;
   callback?: () => void;
 }
 
-const PostReply: FC<ComponentProps> = ({ isModal = false, postId, callback }) => {
+const PostReply: FC<ComponentProps> = ({ postId, callback }) => {
   const apiCtx = api.useContext();
 
   const { mutate, isLoading, isError } = api.posts.reply.useMutation({
@@ -42,7 +41,7 @@ const PostReply: FC<ComponentProps> = ({ isModal = false, postId, callback }) =>
     toast.error(GENERIC_ERROR);
   }
 
-  return <CreatePost isModal={isModal} callback={onFormSubmit} isLoading={isLoading} />
+  return <CreatePost text={'Leave a reply'} callback={onFormSubmit} isLoading={isLoading} />
 };
 
 export default PostReply;

@@ -34,7 +34,7 @@ const CreateNewPost = () => {
     toast.error(GENERIC_ERROR);
   }
 
-  return <CreatePost isLoading={isLoading} callback={onFormSubmit} />
+  return <CreatePost text={'What\'s happening?'} isLoading={isLoading} callback={onFormSubmit} />
 };
 
 export default CreateNewPost;

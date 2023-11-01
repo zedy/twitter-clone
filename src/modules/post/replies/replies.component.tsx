@@ -47,7 +47,7 @@ const Replies: FC<ComponentProps> = ({ post }) => {
       >
         <div className="m-auto">
           {defaultTweetBody(true, post)}
-          <PostReply isModal={true} postId={post.id} callback={closeModal} />
+          <PostReply postId={post.id} callback={closeModal} />
         </div>
       </Modal>
       <div

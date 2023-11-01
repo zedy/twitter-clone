@@ -8,32 +8,26 @@ import * as yup from "yup"
 // components
 import UserProfilePicture from '~/modules/profile/avatar.component';
 import { Spinner } from '~/modules/spinner/loading.component';
+import AddMedia from './addMedia.component';
 
 type FormData = {
   content: string;
 }
 
 interface ComponentProps {
-  isModal?: boolean;
   callback: (arg0: FormData) => void;
   isLoading: boolean;
+  text: string;
 }
 
 const schema = yup
-.object({
-  content: yup.string().required().min(1).max(255),
-})
-.required()
+  .object({
+    content: yup.string().required().min(1).max(255),
+  })
+  .required()
 
-const CreatePost: FC<ComponentProps> = ({ isModal = false, callback, isLoading }) => {
+const CreatePost: FC<ComponentProps> = ({ text, callback, isLoading }) => {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [active, setActive] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (isModal) {
-      setActive(true);
-    }
-  }, []);
 
   const {
     register,
@@ -45,12 +39,6 @@ const CreatePost: FC<ComponentProps> = ({ isModal = false, callback, isLoading }
   });
 
   const { ref, ...rest } = register('content');
-
-  const handleFocus = () => {
-    if (!isModal) {
-      setActive(true);
-    }
-  }
 
   const onFormSubmit = (data: FormData) => {
     callback({ content: data.content });
@@ -67,8 +55,7 @@ const CreatePost: FC<ComponentProps> = ({ isModal = false, callback, isLoading }
       <UserProfilePicture />
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit(onFormSubmit)}
-        onFocus={handleFocus}
-        className={`flex w-full ${active ? 'flex-col items-end' : 'items-start'}`}
+        className='flex w-full flex-col items-end'
       >
         <textarea {...rest} name="content" ref={(e) => {
           ref(e);
@@ -78,13 +65,16 @@ const CreatePost: FC<ComponentProps> = ({ isModal = false, callback, isLoading }
             textAreaRef.current!.style.height = "auto";
             textAreaRef.current!.style.height = textAreaRef.current!.scrollHeight + "px";
           }}
-          placeholder="Leave a reply ..."
+          placeholder={text}
           className="bg-gray-800 w-full resize-none mb-3 overflow-y-hidden grow outline-none p-1 pl-2 rounded-2xl"
         />
-        <button
+        <div className='flex w-full justify-between'>
+          <AddMedia />
+          <button
           disabled={isLoading}
-          className={`text-amber-600 ${!active ? 'ml-5 mt-4' : ''}`}
+          className='text-amber-600'
         >{isLoading ? <Spinner /> : 'Post'}</button>
+        </div>        
       </form>
     </div>
   );
