@@ -1,4 +1,4 @@
-import SearchBar from '../search/search.component';
+import SearchBar from '../search/searchBar.component';
 
 const RightSideBar = () => {
   return (

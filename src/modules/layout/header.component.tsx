@@ -1,4 +1,4 @@
-import CreatePostWizzard from '../post/post-wizzard.component';
+import CreatePostWizzard from '../post/postWizzard.component';
 
 const HeaderComponent = () => {
   return (

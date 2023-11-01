@@ -12,7 +12,7 @@ import { Retweet } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
 import Replies from './replies/replies.component';
 import Likes from './likes/likes.component';
-import PostReply from './post-reply.component';
+import PostReply from './postReply.component';
 
 dayjs.extend(relativeTime);
 

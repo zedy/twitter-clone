@@ -1,10 +1,9 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import useDebounceQueryRefetch from '~/hooks/useDebounceQueryRefetch';
 import { api } from '~/utils/api';
 import { COLOR_PRIMARY, COLOR_SECONDARY_600 } from '~/utils/conts';
 import { Cross, Search } from '~/utils/svgs';
+import SearchList from './searchList.component';
 
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -18,7 +17,7 @@ const SearchBar = () => {
     retry: false,
   });
 
-  const debouceRefetch = useDebounceQueryRefetch(refetch, 650);
+  const debouceRefetch = useDebounceQueryRefetch(refetch, 550);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -48,8 +47,14 @@ const SearchBar = () => {
     );
   };
 
-  console.log('data: ', data);
-
+  /**
+   * the reason we don't move the seach-bar part of the jsx and it's proprietery
+   * logic into a separate components is it would need 5 different props passed 
+   * down and that's way to much. 
+   * 
+   * If/when we come to the crossroad where we need a similar fn we'll refactor
+   * for now it'll stay like this.
+   */
   return (
     <div className='relative'>
       <div className={`relative z-20 flex focus:text-slate-100 border transition-all rounded-full ${isFocused ? 'border-amber-600' : 'border-transparent'}`}>
@@ -72,27 +77,7 @@ const SearchBar = () => {
         </div>
       </div>
 
-      {data && isFocused && <div className='absolute top-0 pt-12 w-full bg-gray-800 z-10 rounded-3xl'>
-        <ul className='py-4'>
-          {data.map((user, i) => {
-            return <li key={user.id} className={`w-full p-2 transition-all bg-transparent hover:bg-gray-700 ${i > 0 ? 'mt-3' : ''}`}>
-              <Link className="flex w-full" href={`/@${user.username}`}>
-                <Image
-                  className='rounded-full overflow-hidden mr-3'
-                  src={user.image!}
-                  alt={user.username!}
-                  width={48}
-                  height={48}
-                />
-                <div className='flex flex-col'>
-                  <b>{user.name}</b>
-                  <span className="font-thin text-sm text-slate-300">@{user.username}</span>
-                </div>
-              </Link>
-            </li>
-          })}
-        </ul>
-      </div>}
+      {data && isFocused && <SearchList data={data} />}
     </div>
   )
 }

@@ -2,8 +2,6 @@
 import { type FC, memo } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Image from 'next/image';
-import Link from 'next/link';
 import type { Post as PostType } from '@prisma/client';
 import type { Like, User } from '@prisma/client';
 
@@ -12,7 +10,7 @@ import { Retweet } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
 import Replies from './replies/replies.component';
 import Likes from './likes/likes.component';
-import { defaultTweetBody } from './post-body.component';
+import { defaultTweetBody } from './postBody.component';
 
 dayjs.extend(relativeTime);
 

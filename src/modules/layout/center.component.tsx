@@ -3,10 +3,10 @@ import { type FC } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 
 // components
-import Sidenav from '../sideNav/sideNav.component';
+import Sidenav from '../nav/nav.component';
 import { Logout } from '~/utils/svgs';
 import { COLOR_PRIMARY } from '~/utils/conts';
-import RightSideBar from '../sideBar/sidebar.component';
+import RightSideBar from '../nav/rightSideBar.component';
 
 interface ComponentProps {
   children: JSX.Element | JSX.Element[];

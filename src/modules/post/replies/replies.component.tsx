@@ -12,8 +12,8 @@ import { Modal, useModal } from '~/hooks/useModal';
 import { ReplyFilled, ReplyOutline } from '~/utils/svgs';
 import { COLOR_PRIMARY, LOGIN_REPLY } from '~/utils/conts';
 import type { PostWithUser } from '../post.component';
-import { defaultTweetBody } from '../post-body.component';
-import PostReply from '../post-reply.component';
+import { defaultTweetBody } from '../postBody.component';
+import PostReply from '../postReply.component';
 
 dayjs.extend(relativeTime);
 

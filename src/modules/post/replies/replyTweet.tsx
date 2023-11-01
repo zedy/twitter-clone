@@ -5,7 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Post } from '@prisma/client';
-import type { User } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 
 dayjs.extend(relativeTime);

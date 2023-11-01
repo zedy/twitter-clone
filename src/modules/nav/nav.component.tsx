@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { COLOR_PRIMARY } from '~/utils/conts';
 import { Bell, Home, Profile, Twitter, TwitterOutline } from '~/utils/svgs';
 
-const Sidenav = () => {
+const Nav = () => {
   const { data } = useSession();
 
   return (
@@ -35,4 +35,4 @@ const Sidenav = () => {
   )
 }
 
-export default Sidenav;
+export default Nav;

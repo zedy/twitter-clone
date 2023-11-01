@@ -9,7 +9,7 @@ import { api } from '~/utils/api';
 // components/modules
 import CenterComponent from '~/modules/layout/center.component';
 import { LoadingPage } from '~/modules/spinner/loading.component';
-import PostPageComponent from '~/modules/post/post-page.component';
+import PostPageComponent from '~/modules/post/postPage.component';
 import Post from '~/modules/post/post.component';
 
 function trimContent(content: string) {
