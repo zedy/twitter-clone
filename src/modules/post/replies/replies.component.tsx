@@ -23,7 +23,7 @@ interface ComponentProps {
 
 const Replies: FC<ComponentProps> = ({ post }) => {
   const { data } = useSession();
-  const { openModal, modalProps } = useModal();
+  const { openModal, closeModal, modalProps } = useModal();
 
   const handleClick = () => {
     if (data?.user.id) {
@@ -47,7 +47,7 @@ const Replies: FC<ComponentProps> = ({ post }) => {
       >
         <div className="m-auto">
           {defaultTweetBody(true, post)}
-          <PostReply isModal={true} />
+          <PostReply isModal={true} postId={post.id} callback={closeModal} />
         </div>
       </Modal>
       <div

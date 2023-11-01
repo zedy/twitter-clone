@@ -1,5 +1,4 @@
 // libs
-import type { FC } from 'react';
 import toast from 'react-hot-toast';
 
 // utils
@@ -13,19 +12,12 @@ type FormData = {
   content: string;
 }
 
-interface ComponentProps {
-  isModal?: boolean;
-  postId: string;
-  callback?: () => void;
-}
-
-const PostReply: FC<ComponentProps> = ({ isModal = false, postId, callback }) => {
+const CreateNewPost = () => {
   const apiCtx = api.useContext();
 
-  const { mutate, isLoading, isError } = api.posts.reply.useMutation({
+  const { mutate, isLoading, isError } = api.posts.create.useMutation({
     onSuccess: async () => {
-      await apiCtx.posts.getPostById.invalidate();
-      callback && callback();
+      await apiCtx.posts.getAll.invalidate();
     },
     onError: (error) => {
       // show error in tostrrr
@@ -35,14 +27,14 @@ const PostReply: FC<ComponentProps> = ({ isModal = false, postId, callback }) =>
   });
 
   const onFormSubmit = (data: FormData) => {
-    mutate({ ...data, postId });
+    mutate(data);
   }
 
   if (isError) {
     toast.error(GENERIC_ERROR);
   }
 
-  return <CreatePost isModal={isModal} callback={onFormSubmit} isLoading={isLoading} />
+  return <CreatePost isLoading={isLoading} callback={onFormSubmit} />
 };
 
-export default PostReply;
+export default CreateNewPost;

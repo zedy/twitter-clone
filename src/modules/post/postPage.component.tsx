@@ -65,7 +65,7 @@ const PostPage: FC<ComponentProps> = ({ post }) => {
           </div>
         </div>
         <div className='mt-5'>
-          <PostReply />
+          <PostReply postId={post.id} />
         </div>
       </div>
     </div>

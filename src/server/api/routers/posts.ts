@@ -64,6 +64,9 @@ export const postsRouter = createTRPCRouter({
       orderBy: {
         createdAt: 'desc'
       },
+      where: {
+        type: 'POST'
+      },
       include: {
         User: true,
         likes: true,

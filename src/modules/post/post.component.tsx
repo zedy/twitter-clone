@@ -28,7 +28,7 @@ const Post: FC<ComponentProps> = ({ post }) => {
   function TweetActions() {
     return (
       <div className="flex justify-between w-full pt-4 pr-8">
-        <Replies post={post} />
+        <Replies post={post} postId={post.id} />
         <Likes postId={post.id} likes={post?.likes as [Like]} />
         <div className='flex'>
           {Retweet(24, 24, COLOR_PRIMARY)}
