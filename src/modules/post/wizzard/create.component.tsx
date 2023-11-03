@@ -14,6 +14,11 @@ type FormData = {
   content: string;
 }
 
+export interface MediaCallbackData {
+  type: string,
+  payload: string,
+}
+
 interface ComponentProps {
   callback: (arg0: FormData) => void;
   isLoading: boolean;
@@ -45,7 +50,12 @@ const CreatePost: FC<ComponentProps> = ({ text, callback, isLoading }) => {
     reset();
   }
 
-  // delete?
+  const handleMediaCallback = (data: MediaCallbackData) => {
+    if (data.type === 'emoji') {
+      textAreaRef.current!.value += data.payload;
+    }
+  }
+
   if (errors?.content?.message) {
     toast.error(errors.content.message);
   }
@@ -69,7 +79,7 @@ const CreatePost: FC<ComponentProps> = ({ text, callback, isLoading }) => {
           className="bg-gray-800 w-full resize-none mb-3 overflow-y-hidden grow outline-none p-1 pl-2 rounded-2xl"
         />
         <div className='flex w-full justify-between'>
-          <AddMedia />
+          <AddMedia callback={handleMediaCallback} />
           <button
           disabled={isLoading}
           className='text-amber-600'

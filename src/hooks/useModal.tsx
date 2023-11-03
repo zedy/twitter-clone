@@ -41,14 +41,14 @@ export const Modal: FC<ModalProps> = ({
 
   return (
     <div
-      className="modal fixed w-screen h-screen z-40 top-0 left-0"
+      className="modal fixed w-screen h-screen z-30 top-0 left-0"
       style={{ display: open ? 'block' : 'none' }}>
       <div
         onClick={closeOnBgClick ? onModalCloseCallCallback : () => null}
         className="modal-bg cursor-pointer bg-slate-500 opacity-50 absolute w-full h-full"></div>
       <div className="modal-body bg-slate-900 rounded-xl w-[480px] min-h-[150px] absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
-        <div className='relative h-full'>
-          {isLoading ? <div className="absolute h-full w-full bg-slate-800 opacity-75 z-50">
+        <div className='relative h-full z-50'>
+          {isLoading ? <div className="absolute h-full w-full bg-slate-800 opacity-75 z-40">
             <LoadingOverlay />
           </div> : <div />}
           <div className="modal-header flex justify-between border-b border-slate-400 p-5">
